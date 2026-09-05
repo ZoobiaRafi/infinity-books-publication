@@ -5,7 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>@yield('title', 'Infinite Books Publishing — Turn Your Ideas into Bestselling Books')</title>
 <meta name="description" content="@yield('description', 'From first draft to bookstore shelf — writing, editing, design, publishing and marketing under one roof. A trusted US publishing company.')">
-<link rel="icon" href="{{ asset('assets/favicon.svg') }}" type="image/svg+xml">
+<link rel="icon" href="{{ asset('assets/favicon-32.png') }}" type="image/png" sizes="32x32">
+<link rel="icon" href="{{ asset('assets/favicon-16.png') }}" type="image/png" sizes="16x16">
+<link rel="apple-touch-icon" href="{{ asset('assets/apple-touch-icon.png') }}">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">

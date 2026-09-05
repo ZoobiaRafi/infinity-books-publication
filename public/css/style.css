@@ -125,8 +125,7 @@ h3 { font-size: 1.2rem; font-weight: 600; }
   gap: 1.5rem;
 }
 .logo { display: inline-flex; align-items: center; gap: 0.55rem; flex-shrink: 0; }
-.logo-icon { width: 26px; height: 26px; color: var(--primary); }
-.logo-text { font-family: var(--font-serif); font-weight: 700; font-size: 1.15rem; color: var(--fg); }
+.logo-img { height: 34px; width: auto; display: block; }
 
 .main-nav > ul { display: flex; align-items: center; gap: 1.9rem; }
 .main-nav a, .nav-dropdown-toggle {
@@ -222,7 +221,7 @@ body.nav-open { overflow: hidden; }
   display: flex; align-items: center; justify-content: space-between; gap: 1rem;
   margin-bottom: 1.25rem; padding-bottom: 1.1rem; border-bottom: 1px solid var(--border);
 }
-.mobile-nav-head .logo-text { font-size: 1rem; }
+.mobile-nav-head .logo-img { height: 28px; }
 .mobile-nav-close {
   flex-shrink: 0; width: 36px; height: 36px; border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
