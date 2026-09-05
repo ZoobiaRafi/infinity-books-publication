@@ -38,6 +38,12 @@ class VoyagerServicesBreadSeeder extends Seeder
             ]
         );
 
+        $currentFields = collect($this->rows())->pluck('field');
+
+        DataRow::where('data_type_id', $dataType->id)
+            ->whereNotIn('field', $currentFields)
+            ->delete();
+
         foreach ($this->rows() as $order => $row) {
             DataRow::updateOrCreate(
                 ['data_type_id' => $dataType->id, 'field' => $row['field']],
@@ -96,11 +102,6 @@ class VoyagerServicesBreadSeeder extends Seeder
             ['field' => 'image_alt', 'type' => 'text', 'display_name' => 'Image Alt Text', 'required' => 0, 'browse' => 0, 'read' => 1, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => (object) []],
             ['field' => 'process_heading', 'type' => 'text', 'display_name' => '"How It Works" Heading', 'required' => 1, 'browse' => 0, 'read' => 1, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => (object) []],
             ['field' => 'steps', 'type' => 'text_area', 'display_name' => 'Process Steps', 'required' => 1, 'browse' => 0, 'read' => 1, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => ['placeholder' => "One step per line, formatted as: Step Title|Step description text"]],
-            ['field' => 'testimonial_title', 'type' => 'text', 'display_name' => 'Testimonial Title', 'required' => 0, 'browse' => 0, 'read' => 1, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => (object) []],
-            ['field' => 'testimonial_quote', 'type' => 'text_area', 'display_name' => 'Testimonial Quote', 'required' => 0, 'browse' => 0, 'read' => 1, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => ['placeholder' => 'Leave blank to hide the testimonial section entirely']],
-            ['field' => 'testimonial_initials', 'type' => 'text', 'display_name' => 'Testimonial Initials', 'required' => 0, 'browse' => 0, 'read' => 1, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => (object) []],
-            ['field' => 'testimonial_name', 'type' => 'text', 'display_name' => 'Testimonial Name', 'required' => 0, 'browse' => 0, 'read' => 1, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => (object) []],
-            ['field' => 'testimonial_date', 'type' => 'text', 'display_name' => 'Testimonial Date', 'required' => 0, 'browse' => 0, 'read' => 1, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => (object) []],
             ['field' => 'cta_eyebrow', 'type' => 'text', 'display_name' => 'CTA Eyebrow', 'required' => 1, 'browse' => 0, 'read' => 1, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => (object) []],
             ['field' => 'cta_heading', 'type' => 'text', 'display_name' => 'CTA Heading', 'required' => 1, 'browse' => 0, 'read' => 1, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => (object) []],
             ['field' => 'cta_text', 'type' => 'text_area', 'display_name' => 'CTA Paragraph', 'required' => 1, 'browse' => 0, 'read' => 1, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => (object) []],

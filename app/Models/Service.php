@@ -23,11 +23,6 @@ class Service extends Model
         'image_alt',
         'process_heading',
         'steps',
-        'testimonial_title',
-        'testimonial_quote',
-        'testimonial_initials',
-        'testimonial_name',
-        'testimonial_date',
         'cta_eyebrow',
         'cta_heading',
         'cta_text',
@@ -77,26 +72,6 @@ class Service extends Model
             })
             ->values()
             ->all();
-    }
-
-    /**
-     * The show page reads this as $service['testimonial']['quote'] etc. —
-     * assembled from the flat testimonial_* columns so the admin can edit
-     * each part as its own field.
-     */
-    protected function getTestimonialAttribute(): ?array
-    {
-        if (blank($this->testimonial_quote)) {
-            return null;
-        }
-
-        return [
-            'title' => $this->testimonial_title,
-            'quote' => $this->testimonial_quote,
-            'initials' => $this->testimonial_initials,
-            'name' => $this->testimonial_name,
-            'date' => $this->testimonial_date,
-        ];
     }
 
     /**
