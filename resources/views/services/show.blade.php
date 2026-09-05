@@ -56,22 +56,6 @@
     </div>
   </section>
 
-  <!-- ================= TESTIMONIAL ================= -->
-  @if ($service['testimonial'])
-    <section class="section">
-      <div class="container" style="max-width:640px;">
-        <article class="review-card reveal">
-          <h3>{{ $service['testimonial']['title'] }}</h3>
-          <p>&ldquo;{{ $service['testimonial']['quote'] }}&rdquo;</p>
-          <footer>
-            <span class="avatar">{{ $service['testimonial']['initials'] }}</span>
-            <span><strong>{{ $service['testimonial']['name'] }}</strong><time>{{ $service['testimonial']['date'] }}</time></span>
-          </footer>
-        </article>
-      </div>
-    </section>
-  @endif
-
   <!-- ================= FAQ ================= -->
   @if (count($service['faqs']))
     <section class="section" id="faq">
