@@ -31,6 +31,16 @@ class Service extends Model
         'cta_eyebrow',
         'cta_heading',
         'cta_text',
+        'faq_question_1',
+        'faq_answer_1',
+        'faq_question_2',
+        'faq_answer_2',
+        'faq_question_3',
+        'faq_answer_3',
+        'faq_question_4',
+        'faq_answer_4',
+        'faq_question_5',
+        'faq_answer_5',
     ];
 
     /**
@@ -87,5 +97,27 @@ class Service extends Model
             'name' => $this->testimonial_name,
             'date' => $this->testimonial_date,
         ];
+    }
+
+    /**
+     * Up to 5 question/answer pairs stored as flat faq_question_N /
+     * faq_answer_N columns so the admin can edit each independently. A pair
+     * is skipped entirely unless both its question and answer are filled in
+     * — e.g. leaving pair 3 empty on a service with 5 pairs shows only 4.
+     */
+    protected function getFaqsAttribute(): array
+    {
+        $faqs = [];
+
+        for ($i = 1; $i <= 5; $i++) {
+            $question = $this->{"faq_question_{$i}"};
+            $answer = $this->{"faq_answer_{$i}"};
+
+            if (filled($question) && filled($answer)) {
+                $faqs[] = ['question' => $question, 'answer' => $answer];
+            }
+        }
+
+        return $faqs;
     }
 }

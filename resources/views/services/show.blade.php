@@ -72,6 +72,31 @@
     </section>
   @endif
 
+  <!-- ================= FAQ ================= -->
+  @if (count($service['faqs']))
+    <section class="section" id="faq">
+      <div class="container container-narrow">
+        <div class="section-head reveal">
+          <p class="eyebrow center"><span class="eyebrow-line"></span>FAQ</p>
+          <h2>Questions, <span class="accent">Answered</span></h2>
+        </div>
+        <div class="accordion reveal">
+          @foreach ($service['faqs'] as $i => $faq)
+            <div class="accordion-item {{ $i === 0 ? 'is-open' : '' }}">
+              <button class="accordion-trigger" aria-expanded="{{ $i === 0 ? 'true' : 'false' }}">
+                <span>{{ $faq['question'] }}</span>
+                <span class="accordion-icon">+</span>
+              </button>
+              <div class="accordion-panel">
+                <p>{{ $faq['answer'] }}</p>
+              </div>
+            </div>
+          @endforeach
+        </div>
+      </div>
+    </section>
+  @endif
+
   <!-- ================= CTA ================= -->
   <section class="section section-alt">
     <div class="container" style="text-align:center;">
