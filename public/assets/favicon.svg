@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="ibp-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#e7ac74"/>
+      <stop offset="100%" stop-color="#c17f4a"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="16" fill="#12151e"/>
+  <g transform="translate(14,15)" fill="none" stroke="url(#ibp-grad)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M18 3v29"/>
+    <path d="M2 27a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a7 7 0 0 1 7 7 7 7 0 0 1 7-7h9a2 2 0 0 1 2 2v21a2 2 0 0 1-2 2h-11a4 4 0 0 0-4 4 4 4 0 0 0-4-4Z"/>
+  </g>
+</svg>

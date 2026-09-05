@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="800" height="500">
+  <defs>
+    <linearGradient id="bgG1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1c2130"/>
+      <stop offset="100%" stop-color="#12151e"/>
+    </linearGradient>
+    <linearGradient id="iconG1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#e7ac74"/>
+      <stop offset="100%" stop-color="#c17f4a"/>
+    </linearGradient>
+    <pattern id="grid1" width="46" height="46" patternUnits="userSpaceOnUse">
+      <path d="M46 0H0V46" fill="none" stroke="#ffffff" stroke-opacity="0.05" stroke-width="1"/>
+    </pattern>
+    <radialGradient id="glow1" cx="70%" cy="20%" r="60%">
+      <stop offset="0%" stop-color="#dc9a5f" stop-opacity="0.22"/>
+      <stop offset="100%" stop-color="#dc9a5f" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#bgG1)"/>
+  <rect width="800" height="500" fill="url(#grid1)"/>
+  <rect width="800" height="500" fill="url(#glow1)"/>
+  <g transform="translate(340,175)" fill="none" stroke="url(#iconG1)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M100 20 L130 50 L55 125 L15 130 L20 90 Z"/>
+    <path d="M15 130 L10 145 L25 140"/>
+    <line x1="90" y1="30" x2="120" y2="60"/>
+  </g>
+</svg>
