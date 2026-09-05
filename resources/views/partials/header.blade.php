@@ -20,42 +20,14 @@
           </button>
           <div class="dropdown-menu" id="services-menu">
             <ul class="dropdown-grid">
-              <li>
-                <a href="{{ route('services.show', 'ghostwriting') }}">
-                  <span class="dd-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path></svg></span>
-                  <span class="dd-title">Ghostwriting</span>
-                </a>
-              </li>
-              <li>
-                <a href="{{ route('services.show', 'editing-proofreading') }}">
-                  <span class="dd-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 5H3"></path><path d="M17 12H3"></path><path d="M21 19H3"></path></svg></span>
-                  <span class="dd-title">Editing &amp; Proofreading</span>
-                </a>
-              </li>
-              <li>
-                <a href="{{ route('services.show', 'cover-design') }}">
-                  <span class="dd-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r=".5"></circle><circle cx="17.5" cy="10.5" r=".5"></circle><circle cx="8.5" cy="7.5" r=".5"></circle><circle cx="6.5" cy="12.5" r=".5"></circle><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"></path></svg></span>
-                  <span class="dd-title">Cover Design &amp; Illustration</span>
-                </a>
-              </li>
-              <li>
-                <a href="{{ route('services.show', 'publishing-distribution') }}">
-                  <span class="dd-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path><path d="M2 12h20"></path></svg></span>
-                  <span class="dd-title">Publishing &amp; Distribution</span>
-                </a>
-              </li>
-              <li>
-                <a href="{{ route('services.show', 'book-marketing') }}">
-                  <span class="dd-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"></path><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"></path></svg></span>
-                  <span class="dd-title">Book Marketing</span>
-                </a>
-              </li>
-              <li>
-                <a href="{{ route('services.show', 'audiobook-production') }}">
-                  <span class="dd-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 10v4"></path><path d="M6 6v12"></path><path d="M10 3v18"></path><path d="M14 8v9"></path><path d="M18 5v14"></path><path d="M22 10v4"></path></svg></span>
-                  <span class="dd-title">Audiobook Production</span>
-                </a>
-              </li>
+              @foreach ($navServices as $navService)
+                <li>
+                  <a href="{{ route('services.show', $navService->slug) }}">
+                    <span class="dd-icon">{!! $navService->icon !!}</span>
+                    <span class="dd-title">{{ $navService->nav_title }}</span>
+                  </a>
+                </li>
+              @endforeach
             </ul>
             <a href="{{ route('services.index') }}" class="dd-all">View All Services →</a>
           </div>
@@ -108,12 +80,9 @@
           <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
         </button>
         <ul class="dropdown-menu" id="services-menu-mobile">
-          <li><a href="{{ route('services.show', 'ghostwriting') }}">Ghostwriting</a></li>
-          <li><a href="{{ route('services.show', 'editing-proofreading') }}">Editing &amp; Proofreading</a></li>
-          <li><a href="{{ route('services.show', 'cover-design') }}">Cover Design &amp; Illustration</a></li>
-          <li><a href="{{ route('services.show', 'publishing-distribution') }}">Publishing &amp; Distribution</a></li>
-          <li><a href="{{ route('services.show', 'book-marketing') }}">Book Marketing</a></li>
-          <li><a href="{{ route('services.show', 'audiobook-production') }}">Audiobook Production</a></li>
+          @foreach ($navServices as $navService)
+            <li><a href="{{ route('services.show', $navService->slug) }}">{{ $navService->nav_title }}</a></li>
+          @endforeach
           <li><a href="{{ route('services.index') }}">View All Services</a></li>
         </ul>
       </li>

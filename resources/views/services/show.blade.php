@@ -27,7 +27,7 @@
         <h2>{{ $service['included_heading'] }}</h2>
         <p style="color:var(--fg-muted);margin:1.1rem 0 1.6rem;">{{ $service['included_text'] }}</p>
         <ul class="check-list">
-          @foreach ($service['included_list'] as $item)
+          @foreach ($service['included_list_array'] as $item)
             <li>{{ $item }}</li>
           @endforeach
         </ul>
@@ -46,7 +46,7 @@
         <h2>{{ $service['process_heading'] }}</h2>
       </div>
       <ul class="step-list reveal">
-        @foreach ($service['steps'] as $i => $step)
+        @foreach ($service['steps_array'] as $i => $step)
           <li>
             <span class="step-num">{{ $i + 1 }}</span>
             <div><h4>{{ $step[0] }}</h4><p>{{ $step[1] }}</p></div>
@@ -57,18 +57,20 @@
   </section>
 
   <!-- ================= TESTIMONIAL ================= -->
-  <section class="section">
-    <div class="container" style="max-width:640px;">
-      <article class="review-card reveal">
-        <h3>{{ $service['testimonial']['title'] }}</h3>
-        <p>&ldquo;{{ $service['testimonial']['quote'] }}&rdquo;</p>
-        <footer>
-          <span class="avatar">{{ $service['testimonial']['initials'] }}</span>
-          <span><strong>{{ $service['testimonial']['name'] }}</strong><time>{{ $service['testimonial']['date'] }}</time></span>
-        </footer>
-      </article>
-    </div>
-  </section>
+  @if ($service['testimonial'])
+    <section class="section">
+      <div class="container" style="max-width:640px;">
+        <article class="review-card reveal">
+          <h3>{{ $service['testimonial']['title'] }}</h3>
+          <p>&ldquo;{{ $service['testimonial']['quote'] }}&rdquo;</p>
+          <footer>
+            <span class="avatar">{{ $service['testimonial']['initials'] }}</span>
+            <span><strong>{{ $service['testimonial']['name'] }}</strong><time>{{ $service['testimonial']['date'] }}</time></span>
+          </footer>
+        </article>
+      </div>
+    </section>
+  @endif
 
   <!-- ================= CTA ================= -->
   <section class="section section-alt">

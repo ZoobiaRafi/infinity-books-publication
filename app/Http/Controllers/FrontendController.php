@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ContactSubmission;
+use App\Models\Service;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -24,22 +25,22 @@ class FrontendController extends Controller
     {
         return view('services.index', [
             'active' => 'services',
-            'services' => $this->services(),
+            'services' => Service::orderBy('order')->orderBy('id')->get(),
         ]);
     }
 
     public function servicesShow(string $slug): View
     {
-        $services = $this->services();
+        $service = Service::where('slug', $slug)->first();
 
-        if (! isset($services[$slug])) {
+        if (! $service) {
             throw new NotFoundHttpException();
         }
 
         return view('services.show', [
             'active' => 'services',
             'slug' => $slug,
-            'service' => $services[$slug],
+            'service' => $service,
         ]);
     }
 
@@ -109,240 +110,8 @@ class FrontendController extends Controller
     }
 
     /**
-     * Service content keyed by slug. Static marketing copy — kept here rather
-     * than in the database since it isn't managed through Voyager BREAD.
-     */
-    private function services(): array
-    {
-        return [
-            'ghostwriting' => [
-                'nav_title' => 'Ghostwriting',
-                'title' => 'Ghostwriting That Sounds Like ',
-                'title_accent' => 'You',
-                'meta_description' => 'Professional ghostwriting that captures your voice — memoir, business books and fiction, written to a schedule you can plan around.',
-                'lede' => "Have a story in your head but no time to write it down? Our professional ghostwriters work in your voice, follow your outline, and deliver chapters on a schedule you can keep up with.",
-                'included_heading' => 'From Outline to Finished Manuscript',
-                'included_text' => "Whether you have a full outline, a stack of voice notes, or just a story you've been meaning to tell, our ghostwriters turn it into a publish-ready manuscript — memoir, business book, or fiction — without losing your voice along the way.",
-                'included_list' => [
-                    'In-depth author interviews to capture your voice and story',
-                    'Chapter-by-chapter drafts on an agreed delivery schedule',
-                    'Full-length manuscripts up to 30,000+ words',
-                    'Unlimited revisions on select packages',
-                    'A dedicated project manager throughout',
-                    '100% ownership and confidentiality — your name, your rights',
-                ],
-                'image' => 'assets/images/hero-desk.jpg',
-                'image_alt' => "An author's writing desk with manuscript, fountain pen and hardcover books",
-                'process_heading' => 'Our Ghostwriting Process',
-                'steps' => [
-                    ['Discovery Call', 'We talk through your story, goals and timeline, then match you with a ghostwriter suited to your genre.'],
-                    ['Outline & Voice Sample', 'Before a single chapter is drafted, we build a chapter outline and a short sample so you can confirm the voice feels right.'],
-                    ['Drafting', "Chapters arrive on a set schedule with regular check-ins, so you're never waiting in the dark for progress."],
-                    ['Review & Revision', 'You review the full manuscript and request changes — we refine until it reads exactly as you intended.'],
-                    ['Handoff', 'You receive the final manuscript, fully yours, ready for editing and design.'],
-                ],
-                'testimonial' => [
-                    'title' => 'Exceptional Editing & Publishing',
-                    'quote' => 'The editors refined my story while keeping my voice intact. The whole publishing process was smooth and transparent.',
-                    'initials' => 'PG',
-                    'name' => 'Phillip G.D. Jones',
-                    'date' => 'Mar 12, 2024',
-                ],
-                'cta_eyebrow' => 'Ready to Start Writing?',
-                'cta_heading' => "Let's Get Your Story on the Page",
-                'cta_text' => "Book a free consultation and we'll match you with the right ghostwriter for your genre.",
-            ],
-            'editing-proofreading' => [
-                'nav_title' => 'Editing & Proofreading',
-                'title' => 'Editing That Makes Agents ',
-                'title_accent' => 'Say Yes',
-                'meta_description' => "Developmental editing, line editing and proofreading that gets your manuscript to a professional, reader-ready standard.",
-                'lede' => 'Even strong manuscripts get rejected over weak editing. Our editors handle developmental editing, line editing, copyediting and proofreading — line by line, chapter by chapter.',
-                'included_heading' => 'Four Layers of Editorial Polish',
-                'included_text' => 'We match your manuscript with editors who work in your genre, then move through structural, line and copy edits before a final proofread — so nothing gets missed.',
-                'included_list' => [
-                    'Developmental editing for structure, pacing and plot',
-                    'Line editing for voice, clarity and flow',
-                    'Copyediting for grammar, consistency and style',
-                    'Final proofread before formatting and print',
-                    'Editor notes and a marked-up manuscript, not just clean copy',
-                    'A dedicated editor who stays with your book start to finish',
-                ],
-                'image' => 'assets/images/book-nonfiction.jpg',
-                'image_alt' => 'A finished hardcover book ready for print',
-                'process_heading' => 'Our Editing Process',
-                'steps' => [
-                    ['Manuscript Assessment', 'We read your full manuscript and flag the structural issues before touching a single sentence.'],
-                    ['Developmental Edit', 'We address plot, pacing, character arcs or argument structure — the big-picture fixes that matter most.'],
-                    ['Line & Copy Edit', 'Sentence-level editing for voice and clarity, followed by a grammar and consistency pass.'],
-                    ['Author Review', 'You review every suggested change and approve or adjust before we move to final proofreading.'],
-                    ['Final Proofread', 'One last pass immediately before formatting, catching anything introduced during revisions.'],
-                ],
-                'testimonial' => [
-                    'title' => 'Great Support for First-Time Authors',
-                    'quote' => 'The editorial team was patient, detailed and professional. I felt supported throughout the entire publishing journey.',
-                    'initials' => 'MG',
-                    'name' => 'Maria Garcia',
-                    'date' => 'Oct 3, 2024',
-                ],
-                'cta_eyebrow' => 'Ready for a Second Pair of Eyes?',
-                'cta_heading' => "Let's Polish Your Manuscript",
-                'cta_text' => "Send us your draft and we'll recommend the right level of edit for where it stands today.",
-            ],
-            'cover-design' => [
-                'nav_title' => 'Cover Design & Illustration',
-                'title' => 'Covers Readers ',
-                'title_accent' => 'Judge (and Buy)',
-                'meta_description' => "Covers and interior artwork that capture your story at a glance — from children's picture books to literary fiction.",
-                'lede' => "Covers and interior artwork that capture your story at a glance — from children's picture books to literary fiction, designed to stop the scroll on a bookstore shelf or an Amazon thumbnail.",
-                'included_heading' => 'Design That Matches Your Genre',
-                'included_text' => "A thriller cover and a picture book cover need completely different design instincts. We match your project with an illustrator or designer who works in your genre, then iterate until it's right.",
-                'included_list' => [
-                    'Custom front cover concepts, not template mockups',
-                    'Full wraparound design for print (front, spine, back)',
-                    'Interior formatting for print and e-book',
-                    "Full-colour illustration for children's and picture books",
-                    'Multiple concept rounds with revisions included',
-                    'Print-ready files at trim size and bleed for any printer',
-                ],
-                'image' => 'assets/images/book-children.jpg',
-                'image_alt' => "Illustrated children's book cover",
-                'process_heading' => 'Our Design Process',
-                'steps' => [
-                    ['Creative Brief', "We talk genre, comp titles and mood — the covers you love and the ones you don't."],
-                    ['Concept Round', 'Your designer presents two to three distinct cover directions to react to.'],
-                    ['Refinement', "We narrow to one direction and refine typography, imagery and colour until it's launch-ready."],
-                    ['Interior Formatting', 'Once the cover is locked, we format the interior for print and e-book to match.'],
-                    ['Final Files', 'You receive print-ready and digital files sized correctly for every platform you publish on.'],
-                ],
-                'testimonial' => [
-                    'title' => "Amazing Children's Book Illustration",
-                    'quote' => 'The characters were vibrant and perfectly matched the tone of my story. Kids absolutely love the visuals.',
-                    'initials' => 'ST',
-                    'name' => 'Sarah Thompson',
-                    'date' => 'Jun 15, 2024',
-                ],
-                'cta_eyebrow' => 'Ready to See Your Cover?',
-                'cta_heading' => "Let's Design Something Readers Notice",
-                'cta_text' => "Tell us about your book and genre — we'll match you with the right designer.",
-            ],
-            'publishing-distribution' => [
-                'nav_title' => 'Publishing & Distribution',
-                'title' => 'Published Everywhere ',
-                'title_accent' => 'Readers Shop',
-                'meta_description' => 'Formatting and release on Amazon, IngramSpark and other major platforms — print, e-book and beyond, with your ISBN assigned to you.',
-                'lede' => 'Print, e-book, hardcover, paperback. We format your manuscript to industry standards, assign your ISBN, set up distribution, and put your book on every retailer that matters. You stay in control — we do the heavy lifting.',
-                'included_heading' => 'Wherever Readers Buy Books',
-                'included_text' => "We handle the technical side of getting a book to market — formatting, metadata, ISBN registration and retailer setup — so you go from finished file to available-for-purchase without the guesswork.",
-                'included_list' => [
-                    'Print and e-book formatting to retailer specifications',
-                    'ISBN assignment, registered in your name',
-                    'Amazon KDP, IngramSpark and Barnes & Noble setup',
-                    'Global e-book distribution (Apple Books, Kobo, Google Play)',
-                    'Metadata, categories and keyword optimisation',
-                    'Author copies and print-on-demand set up for ongoing orders',
-                ],
-                'image' => 'assets/images/book-fiction.jpg',
-                'image_alt' => 'A published novel cover',
-                'process_heading' => 'Our Publishing Process',
-                'steps' => [
-                    ['Format Selection', 'We confirm which formats you want live — paperback, hardcover, e-book, or all three.'],
-                    ['Technical Formatting', "Your final manuscript is formatted to each retailer's exact specifications for trim size and layout."],
-                    ['ISBN & Metadata', 'We register your ISBN and write retailer-optimised titles, descriptions and keywords.'],
-                    ['Platform Setup', "Your book goes live on Amazon, IngramSpark and the retailers you've chosen."],
-                    ['Launch Check', 'We verify every listing looks right and order a proof copy before announcing your release.'],
-                ],
-                'testimonial' => [
-                    'title' => 'Professional Audiobook Production',
-                    'quote' => 'Narration, editing and production were handled perfectly. The audiobook opened a completely new audience for my book.',
-                    'initials' => 'RL',
-                    'name' => 'Robert Lee',
-                    'date' => 'Oct 20, 2024',
-                ],
-                'cta_eyebrow' => 'Ready to Go Live?',
-                'cta_heading' => "Let's Get Your Book on Shelves",
-                'cta_text' => "Tell us which formats and platforms matter most to you — we'll map out the fastest path to launch.",
-            ],
-            'book-marketing' => [
-                'nav_title' => 'Book Marketing',
-                'title' => 'A Launch Plan, ',
-                'title_accent' => 'Not Just a Launch Day',
-                'meta_description' => 'Launch campaigns, social promotion and PR support that put your book in front of the right readers.',
-                'lede' => 'Bespoke launch campaigns, social promotion and PR support that put your book in front of the right readers — before, during and after release day.',
-                'included_heading' => 'Marketing Built Around Your Book',
-                'included_text' => "A great book still needs readers to find it. We build a launch plan around your genre and audience, then run it — so you spend your time writing the next one, not chasing algorithms.",
-                'included_list' => [
-                    'Amazon listing optimisation (title, keywords, categories, A+ content)',
-                    'Author website and landing page',
-                    'Social media launch kit and content calendar',
-                    'Press release and media/blogger outreach',
-                    'Advance reader copy (ARC) distribution for early reviews',
-                    'Email launch sequence for your subscriber list',
-                ],
-                'image' => 'assets/images/book-horror.jpg',
-                'image_alt' => 'A book on a shelf ready for launch',
-                'process_heading' => 'Our Marketing Process',
-                'steps' => [
-                    ['Audience & Positioning', 'We identify who your ideal reader is and how your book should be positioned against comp titles.'],
-                    ['Launch Kit Build', 'Listing copy, social assets, press materials and email sequences are drafted ahead of release.'],
-                    ['Pre-Launch Buzz', 'ARC distribution and outreach start building early reviews and momentum before release day.'],
-                    ['Launch Week', 'Coordinated social, email and PR push around your release date to maximise first-week sales and rankings.'],
-                    ['Post-Launch Momentum', 'We monitor performance and keep the campaign running so your book keeps finding readers after week one.'],
-                ],
-                'testimonial' => [
-                    'title' => 'Powerful Book Marketing Strategy',
-                    'quote' => "Their campaigns improved my book's visibility and boosted sales. I was impressed by their knowledge of the market.",
-                    'initials' => 'MR',
-                    'name' => 'Michael Rodriguez',
-                    'date' => 'Jan 16, 2024',
-                ],
-                'cta_eyebrow' => 'Ready to Reach Readers?',
-                'cta_heading' => "Let's Plan Your Launch",
-                'cta_text' => "Tell us your release timeline and we'll build a campaign around it.",
-            ],
-            'audiobook-production' => [
-                'nav_title' => 'Audiobook Production',
-                'title' => 'Give Your Book ',
-                'title_accent' => 'a Voice',
-                'meta_description' => 'Professional narration, editing and mastering that brings your book to listeners on Audible, Apple Books and Spotify.',
-                'lede' => 'Professional narration, editing and mastering that brings your book to listeners on Audible, Apple Books and Spotify — a growing audience many authors never reach.',
-                'included_heading' => 'Studio-Quality Production',
-                'included_text' => "We handle casting, direction, recording and post-production, so your audiobook meets the technical standards Audible and Apple Books require — without you needing a home studio.",
-                'included_list' => [
-                    'Narrator casting and voice sample selection',
-                    'Professional studio recording and direction',
-                    'Editing, levelling and noise reduction',
-                    'ACX/Audible technical compliance mastering',
-                    'Distribution to Audible, Apple Books and Spotify',
-                    'Optional multi-voice production for fiction and dialogue-heavy books',
-                ],
-                'image' => 'assets/images/book-audio.jpg',
-                'image_alt' => 'Audiobook cover art',
-                'process_heading' => 'Our Audiobook Process',
-                'steps' => [
-                    ['Narrator Casting', 'We shortlist narrators suited to your genre and send voice samples for you to choose from.'],
-                    ['Recording', 'Your narrator records in a professional studio, directed to match the tone of your book.'],
-                    ['Editing & Mastering', 'Audio is edited for pacing and cleaned up to meet platform loudness and noise-floor requirements.'],
-                    ['Quality Review', 'You review chapter samples and request any re-reads before final approval.'],
-                    ['Distribution', 'We upload and configure your audiobook across Audible, Apple Books and Spotify.'],
-                ],
-                'testimonial' => [
-                    'title' => 'Professional Audiobook Production',
-                    'quote' => 'Narration, editing and production were handled perfectly. The audiobook opened a completely new audience for my book.',
-                    'initials' => 'RL',
-                    'name' => 'Robert Lee',
-                    'date' => 'Oct 20, 2024',
-                ],
-                'cta_eyebrow' => 'Ready for Listeners?',
-                'cta_heading' => "Let's Produce Your Audiobook",
-                'cta_text' => "Tell us about your book and we'll recommend the right narrator and production path.",
-            ],
-        ];
-    }
-
-    /**
-     * Blog post content keyed by slug. Static editorial copy for the same
-     * reason as services() above.
+     * Blog post content keyed by slug. Static editorial copy — not yet
+     * managed through Voyager BREAD.
      */
     private function blogPosts(): array
     {
