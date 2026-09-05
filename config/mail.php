@@ -113,4 +113,16 @@ return [
         'name' => env('MAIL_FROM_NAME', 'Example'),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Contact Form Notification Address
+    |--------------------------------------------------------------------------
+    |
+    | Where the "new contact form submission" notification email is sent.
+    | Defaults to the business address shown in the site footer.
+    |
+    */
+
+    'contact_notify_address' => env('CONTACT_NOTIFY_EMAIL', 'info@infinitebookspublishing.co'),
+
 ];

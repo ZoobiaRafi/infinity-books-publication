@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ContactSubmissionConfirmation;
+use App\Mail\ContactSubmissionReceived;
 use App\Models\ContactSubmission;
 use App\Models\Service;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\View\View;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -92,7 +96,16 @@ class FrontendController extends Controller
             'message' => ['required', 'string', 'max:5000'],
         ]);
 
-        ContactSubmission::create($validated);
+        $submission = ContactSubmission::create($validated);
+
+        try {
+            Mail::to(config('mail.contact_notify_address'))->send(new ContactSubmissionReceived($submission));
+            Mail::to($submission->email)->send(new ContactSubmissionConfirmation($submission));
+        } catch (\Throwable $e) {
+            // The submission is already saved — don't fail the request over a
+            // mail delivery problem, just log it so it can be investigated.
+            Log::error('Contact form email failed to send: '.$e->getMessage());
+        }
 
         return back()
             ->with('success', "Thanks! Your message has been received — we'll be in touch within one business day.")
