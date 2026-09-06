@@ -33,6 +33,12 @@
           </figure>
         @endforeach
       </div>
+
+      @if ($portfolioItems->count() > 6)
+        <p style="text-align:center;margin-top:2.5rem;">
+          <button type="button" id="portfolio-toggle-btn" class="btn btn-outline">Show More</button>
+        </p>
+      @endif
     </div>
   </section>
 

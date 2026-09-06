@@ -88,21 +88,48 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  /* ---------- Portfolio filter ---------- */
+  /* ---------- Portfolio filter + show more/less ---------- */
   const filterBar = document.getElementById('filter-bar');
   if (filterBar) {
     const cards = document.querySelectorAll('#portfolio-full-grid .portfolio-card');
+    const toggleBtn = document.getElementById('portfolio-toggle-btn');
+    const visibleLimit = 6;
+    let currentFilter = 'all';
+    let expanded = false;
+
+    const applyVisibility = () => {
+      const matching = Array.from(cards).filter(card => currentFilter === 'all' || card.dataset.category === currentFilter);
+      matching.forEach((card, i) => {
+        card.hidden = !expanded && i >= visibleLimit;
+      });
+      cards.forEach(card => {
+        if (!matching.includes(card)) card.hidden = true;
+      });
+      if (toggleBtn) {
+        toggleBtn.hidden = matching.length <= visibleLimit;
+        toggleBtn.textContent = expanded ? 'Show Less' : 'Show More';
+      }
+    };
+
     filterBar.addEventListener('click', (e) => {
       const btn = e.target.closest('.filter-btn');
       if (!btn) return;
       filterBar.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('is-active'));
       btn.classList.add('is-active');
-      const filter = btn.dataset.filter;
-      cards.forEach(card => {
-        const show = filter === 'all' || card.dataset.category === filter;
-        card.hidden = !show;
-      });
+      currentFilter = btn.dataset.filter;
+      expanded = false;
+      applyVisibility();
     });
+
+    if (toggleBtn) {
+      toggleBtn.addEventListener('click', () => {
+        expanded = !expanded;
+        applyVisibility();
+        if (!expanded) toggleBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      });
+    }
+
+    applyVisibility();
   }
 
   /* ---------- Reveal-on-scroll animation ---------- */
