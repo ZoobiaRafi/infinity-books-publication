@@ -123,6 +123,6 @@ return [
     |
     */
 
-    'contact_notify_address' => env('CONTACT_NOTIFY_EMAIL', 'info@infinitebookspublishing.co'),
+    'contact_notify_address' => env('CONTACT_NOTIFY_EMAIL', 'info@infinitebookspublishing.com'),
 
 ];

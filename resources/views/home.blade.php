@@ -376,11 +376,11 @@
             </span>
             <span><strong>Give us a ring</strong><span>+1 (980) 223-4655</span></span>
           </a>
-          <a class="contact-method" href="mailto:info@infinitebookspublishing.co">
+          <a class="contact-method" href="mailto:info@infinitebookspublishing.com">
             <span class="feature-icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg>
             </span>
-            <span><strong>Drop us a line</strong><span>info@infinitebookspublishing.co</span></span>
+            <span><strong>Drop us a line</strong><span>info@infinitebookspublishing.com</span></span>
           </a>
         </div>
       </div>

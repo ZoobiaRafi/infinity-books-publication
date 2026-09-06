@@ -35,7 +35,7 @@
           </tr>
           <tr>
             <td style="padding:16px 32px; background:#f4f3f1; font-size:12px; color:#9aa2b2;">
-              Infinite Books Publishing &middot; +1 (980) 223-4655 &middot; info@infinitebookspublishing.co
+              Infinite Books Publishing &middot; +1 (980) 223-4655 &middot; info@infinitebookspublishing.com
             </td>
           </tr>
         </table>

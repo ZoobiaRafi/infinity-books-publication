@@ -40,7 +40,7 @@
       <p>We may update this Privacy Policy from time to time. The current version will always be posted on this page.</p>
 
       <h2>8. Contact</h2>
-      <p>Questions about this policy or your data can be directed to <a href="mailto:info@infinitebookspublishing.co">info@infinitebookspublishing.co</a> or <a href="tel:9802234655">+1 (980) 223-4655</a>.</p>
+      <p>Questions about this policy or your data can be directed to <a href="mailto:info@infinitebookspublishing.com">info@infinitebookspublishing.com</a> or <a href="tel:9802234655">+1 (980) 223-4655</a>.</p>
     </div>
   </section>
 
