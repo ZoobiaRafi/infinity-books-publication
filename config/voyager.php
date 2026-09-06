@@ -191,7 +191,7 @@ return [
     ],
 
     'additional_js' => [
-        'js/admin-notify.js',
+        //'js/custom.js',
     ],
 
     'googlemaps' => [

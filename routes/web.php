@@ -1,7 +1,5 @@
 <?php
 
-use App\Http\Controllers\Admin\ChatController as AdminChatController;
-use App\Http\Controllers\ChatController;
 use App\Http\Controllers\FrontendController;
 use Illuminate\Support\Facades\Route;
 
@@ -23,20 +21,6 @@ Route::post('/contact', [FrontendController::class, 'contactStore'])->name('cont
 Route::get('/terms', [FrontendController::class, 'terms'])->name('terms');
 Route::get('/privacy', [FrontendController::class, 'privacy'])->name('privacy');
 
-// Public chat widget endpoints (guest, session-scoped — no auth required)
-Route::post('/chat/send', [ChatController::class, 'send'])->name('chat.send');
-Route::get('/chat/poll', [ChatController::class, 'poll'])->name('chat.poll');
-
-
 Route::group(['prefix' => 'admin'], function () {
     Voyager::routes();
-});
-
-Route::group(['prefix' => 'admin/chats', 'as' => 'admin.chats.', 'middleware' => ['web', 'admin.user']], function () {
-    Route::get('/', [AdminChatController::class, 'index'])->name('index');
-    Route::get('/unread-check', [AdminChatController::class, 'unreadCheck'])->name('unread-check');
-    Route::get('/{conversation}', [AdminChatController::class, 'show'])->name('show');
-    Route::get('/{conversation}/poll', [AdminChatController::class, 'poll'])->name('poll');
-    Route::post('/{conversation}/reply', [AdminChatController::class, 'reply'])->name('reply');
-    Route::post('/{conversation}/close', [AdminChatController::class, 'close'])->name('close');
 });
