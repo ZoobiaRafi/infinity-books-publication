@@ -108,7 +108,7 @@ class FrontendController extends Controller
         }
 
         return back()
-            ->with('success', "Thanks! Your message has been received — we'll be in touch within one business day.")
+            ->with('success', "We have received your details. Our team will contact you shortly.")
             ->withInput();
     }
 
