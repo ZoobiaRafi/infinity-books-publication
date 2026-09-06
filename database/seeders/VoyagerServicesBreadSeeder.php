@@ -87,8 +87,8 @@ class VoyagerServicesBreadSeeder extends Seeder
     {
         return [
             ['field' => 'order', 'type' => 'number', 'display_name' => 'Order', 'required' => 0, 'browse' => 1, 'read' => 0, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => (object) []],
-            ['field' => 'slug', 'type' => 'text', 'display_name' => 'Slug', 'required' => 1, 'browse' => 1, 'read' => 1, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => ['placeholder' => 'Auto-generated from the Nav / Card Title — edit only if you need a different URL', 'slugify' => ['origin' => 'nav_title']]],
             ['field' => 'nav_title', 'type' => 'text', 'display_name' => 'Nav / Card Title', 'required' => 1, 'browse' => 1, 'read' => 1, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => (object) []],
+            ['field' => 'slug', 'type' => 'text', 'display_name' => 'Slug', 'required' => 1, 'browse' => 1, 'read' => 1, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => ['placeholder' => 'Auto-generated from the Nav / Card Title — edit only if you need a different URL', 'slugify' => ['origin' => 'nav_title']]],
             ['field' => 'summary', 'type' => 'text_area', 'display_name' => 'Card Summary', 'required' => 1, 'browse' => 0, 'read' => 1, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => ['placeholder' => 'Write a brief summary / one-liner shown on the services grid card']],
             ['field' => 'icon', 'type' => 'icon_picker', 'display_name' => 'Icon', 'required' => 0, 'browse' => 0, 'read' => 1, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => (object) []],
             ['field' => 'title', 'type' => 'text', 'display_name' => 'Page Title', 'required' => 1, 'browse' => 0, 'read' => 1, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => ['placeholder' => 'e.g. "Ghostwriting That Sounds Like "']],

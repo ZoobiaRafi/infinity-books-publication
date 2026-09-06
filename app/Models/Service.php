@@ -10,17 +10,22 @@ class Service extends Model
     protected static function booted(): void
     {
         static::saving(function (Service $service) {
-            if (blank($service->slug) && filled($service->nav_title)) {
-                $service->slug = $service->uniqueSlugFrom($service->nav_title);
+            $source = filled($service->slug) ? $service->slug : $service->nav_title;
+
+            if (filled($source)) {
+                $service->slug = $service->uniqueSlugFrom($source);
             }
         });
     }
 
     /**
      * Server-side fallback for the admin's slugify JS (Voyager's `slugify`
-     * form-field option, configured on the `slug` data_row) — covers the
-     * rare case of JS being disabled or the field being submitted blank.
-     * Appends -2, -3, etc. if the generated slug is already taken.
+     * form-field option, configured on the `slug` data_row) — covers a
+     * blank slug (JS disabled, or the field left empty) as well as a
+     * collision: if the slug (whether auto-filled or hand-typed) is already
+     * taken by another service, appends -2, -3, etc. until it's unique.
+     * Str::slug() is idempotent on an already-valid slug, so this is safe
+     * to run on every save regardless of where the value came from.
      */
     private function uniqueSlugFrom(string $source): string
     {
