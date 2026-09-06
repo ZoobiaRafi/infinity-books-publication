@@ -125,9 +125,10 @@ h3 { font-size: 1.2rem; font-weight: 600; }
   gap: 1.5rem;
 }
 .logo { display: inline-flex; align-items: center; gap: 0.55rem; flex-shrink: 0; }
-.logo-img { height: 46px; width: auto; display: block; }
+.logo-icon-img { height: 46px; width: auto; display: block; }
+.logo-text { font-family: var(--font-serif); font-weight: 700; font-size: 1.3rem; color: var(--fg); line-height: 1; }
 
-.main-nav > ul { display: flex; align-items: center; gap: 1.9rem; }
+.main-nav > ul { display: flex; align-items: center; gap: 1.5rem; }
 .main-nav a, .nav-dropdown-toggle {
   font-size: 0.92rem; font-weight: 500; color: var(--fg-muted);
   display: inline-flex; align-items: center; gap: 0.3rem;
@@ -221,7 +222,8 @@ body.nav-open { overflow: hidden; }
   display: flex; align-items: center; justify-content: space-between; gap: 1rem;
   margin-bottom: 1.25rem; padding-bottom: 1.1rem; border-bottom: 1px solid var(--border);
 }
-.mobile-nav-head .logo-img { height: 36px; }
+.mobile-nav-head .logo-icon-img { height: 30px; }
+.mobile-nav-head .logo-text { font-size: 1.05rem; }
 .mobile-nav-close {
   flex-shrink: 0; width: 36px; height: 36px; border-radius: 50%;
   display: flex; align-items: center; justify-content: center;

@@ -2,7 +2,8 @@
 <header class="site-header" id="site-header">
   <div class="container header-inner">
     <a href="{{ route('home') }}" class="logo" aria-label="Infinite Books Publishing — home">
-      <img src="{{ asset('assets/logo-header.png') }}" alt="Infinite Books Publishing" class="logo-img">
+      <img src="{{ asset('assets/logo-icon-mark.png') }}" alt="" class="logo-icon-img">
+      <span class="logo-text">Infinite Books <span class="accent">Publishing</span></span>
     </a>
 
     <nav class="main-nav" id="main-nav" aria-label="Primary">
@@ -57,7 +58,8 @@
 <div class="mobile-nav" id="mobile-nav" aria-hidden="true">
     <div class="mobile-nav-head">
       <a href="{{ route('home') }}" class="logo">
-        <img src="{{ asset('assets/logo-header.png') }}" alt="Infinite Books Publishing" class="logo-img">
+        <img src="{{ asset('assets/logo-icon-mark.png') }}" alt="" class="logo-icon-img">
+      <span class="logo-text">Infinite Books <span class="accent">Publishing</span></span>
       </a>
       <button class="mobile-nav-close" id="mobile-nav-close" aria-label="Close menu">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
