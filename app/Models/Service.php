@@ -3,9 +3,39 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Service extends Model
 {
+    protected static function booted(): void
+    {
+        static::saving(function (Service $service) {
+            if (blank($service->slug) && filled($service->nav_title)) {
+                $service->slug = $service->uniqueSlugFrom($service->nav_title);
+            }
+        });
+    }
+
+    /**
+     * Server-side fallback for the admin's slugify JS (Voyager's `slugify`
+     * form-field option, configured on the `slug` data_row) — covers the
+     * rare case of JS being disabled or the field being submitted blank.
+     * Appends -2, -3, etc. if the generated slug is already taken.
+     */
+    private function uniqueSlugFrom(string $source): string
+    {
+        $base = Str::slug($source);
+        $slug = $base;
+        $i = 2;
+
+        while (static::where('slug', $slug)->where('id', '!=', $this->id ?? 0)->exists()) {
+            $slug = "{$base}-{$i}";
+            $i++;
+        }
+
+        return $slug;
+    }
+
     protected $fillable = [
         'order',
         'slug',

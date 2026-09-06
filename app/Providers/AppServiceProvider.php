@@ -3,8 +3,10 @@
 namespace App\Providers;
 
 use App\Models\Service;
+use App\Voyager\FormFields\IconPickerHandler;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
+use TCG\Voyager\Facades\Voyager;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -24,5 +26,7 @@ class AppServiceProvider extends ServiceProvider
         View::composer('partials.header', function ($view) {
             $view->with('navServices', Service::orderBy('order')->orderBy('id')->get());
         });
+
+        Voyager::addFormField(IconPickerHandler::class);
     }
 }
