@@ -56,6 +56,29 @@
     </div>
   </section>
 
+  <!-- ================= RELATED WORK ================= -->
+  @if (count($service['portfolioItems']))
+    <section class="section">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="eyebrow"><span class="eyebrow-line"></span>Related Work</p>
+          <h2>See It In <span class="accent">Action</span></h2>
+        </div>
+        <div class="card-grid portfolio-grid">
+          @foreach ($service['portfolioItems'] as $item)
+            <figure class="portfolio-card reveal">
+              <img src="{{ asset($item->image) }}" alt="{{ $item->image_alt ?? $item->title }}" loading="lazy">
+              <figcaption><span class="tag">{{ $item->category_label }}</span><span class="sub">{{ $item->subtitle }}</span></figcaption>
+            </figure>
+          @endforeach
+        </div>
+        <p style="text-align:center;margin-top:2rem;">
+          <a href="{{ route('portfolio') }}" class="btn btn-outline">View Full Portfolio</a>
+        </p>
+      </div>
+    </section>
+  @endif
+
   <!-- ================= FAQ ================= -->
   @if (count($service['faqs']))
     <section class="section" id="faq">

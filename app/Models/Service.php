@@ -3,10 +3,16 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
 
 class Service extends Model
 {
+    public function portfolioItems(): HasMany
+    {
+        return $this->hasMany(PortfolioItem::class)->orderBy('order');
+    }
+
     protected static function booted(): void
     {
         static::saving(function (Service $service) {

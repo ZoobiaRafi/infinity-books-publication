@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Mail\ContactSubmissionConfirmation;
 use App\Mail\ContactSubmissionReceived;
 use App\Models\ContactSubmission;
+use App\Models\PortfolioItem;
 use App\Models\Service;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -35,7 +36,7 @@ class FrontendController extends Controller
 
     public function servicesShow(string $slug): View
     {
-        $service = Service::where('slug', $slug)->first();
+        $service = Service::with('portfolioItems')->where('slug', $slug)->first();
 
         if (! $service) {
             throw new NotFoundHttpException();
@@ -50,7 +51,11 @@ class FrontendController extends Controller
 
     public function portfolio(): View
     {
-        return view('portfolio', ['active' => 'portfolio']);
+        return view('portfolio', [
+            'active' => 'portfolio',
+            'portfolioItems' => PortfolioItem::with('service')->orderBy('order')->get(),
+            'services' => Service::orderBy('order')->orderBy('id')->get(),
+        ]);
     }
 
     public function testimonials(): View
