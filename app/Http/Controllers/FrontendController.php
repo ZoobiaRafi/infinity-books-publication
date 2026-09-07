@@ -11,6 +11,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -94,11 +95,23 @@ class FrontendController extends Controller
     public function contactStore(Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'phone' => ['required', 'string', 'max:50'],
-            'email' => ['required', 'email', 'max:255'],
-            'service' => ['nullable', 'string', 'max:255'],
-            'message' => ['required', 'string', 'max:5000'],
+            'name' => ['required', 'string', 'max:255', 'regex:/^[^<>]+$/'],
+            'phone' => ['required', 'string', 'max:50', 'regex:/^[0-9+\-\s().]+$/'],
+            'email' => ['required', 'string', 'email:rfc', 'max:255'],
+            'service' => ['nullable', 'string', Rule::in([
+                'Ghostwriting',
+                'Editing & Proofreading',
+                'Cover Design & Illustration',
+                'Publishing & Distribution',
+                'Book Marketing',
+                'Audiobook Production',
+                'Not sure yet',
+            ])],
+            'message' => ['required', 'string', 'max:5000', 'regex:/^[^<>]+$/'],
+        ], [
+            'name.regex' => 'The name field may not contain HTML tags.',
+            'phone.regex' => 'Please enter a valid phone number.',
+            'message.regex' => 'The message field may not contain HTML tags.',
         ]);
 
         $submission = ContactSubmission::create($validated);
