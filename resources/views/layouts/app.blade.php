@@ -40,16 +40,15 @@
 {{-- Tawk.to live chat widget --}}
 <script type="text/javascript">
 var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
-{{-- The contact form's submit button sits in the page's right-hand column
-     on every page that has one (home hero, home CTA, /contact). Tawk's
-     default bottom-right position sat directly on top of it, so clicks on
-     "Get Started" were silently swallowed by the widget's iframe instead of
-     reaching the button — the form never submitted, no email, no
-     confirmation message. Bottom-left keeps the widget clear of that column. --}}
+{{-- Moved back to bottom-right per request. Note: the contact form's
+     submit button sits in the page's right-hand column on every page
+     that has one (home hero, home CTA, /contact), and this exact
+     position previously swallowed clicks on it on short viewports —
+     see git history on this file if that resurfaces. --}}
 Tawk_API.customStyle = {
   visibility: {
-    desktop: { position: 'bl', xOffset: 20, yOffset: 20 },
-    mobile: { position: 'bl', xOffset: 10, yOffset: 10 }
+    desktop: { position: 'br', xOffset: 20, yOffset: 20 },
+    mobile: { position: 'br', xOffset: 10, yOffset: 10 }
   }
 };
 (function () {
