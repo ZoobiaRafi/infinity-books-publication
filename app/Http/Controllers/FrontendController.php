@@ -103,9 +103,12 @@ class FrontendController extends Controller
 
         $submission = ContactSubmission::create($validated);
 
+        $emailSent = false;
+
         try {
             Mail::to(config('mail.contact_notify_address'))->send(new ContactSubmissionReceived($submission));
             Mail::to($submission->email)->send(new ContactSubmissionConfirmation($submission));
+            $emailSent = true;
         } catch (\Throwable $e) {
             // The submission is already saved — don't fail the request over a
             // mail delivery problem, just log it so it can be investigated.
@@ -113,7 +116,9 @@ class FrontendController extends Controller
         }
 
         return back()
-            ->with('success', "We have received your details. Our team will contact you shortly.")
+            ->with('success', $emailSent
+                ? "Your email has been sent to our team. We'll reply to you shortly."
+                : "We have received your details. Our team will contact you shortly.")
             ->withInput();
     }
 

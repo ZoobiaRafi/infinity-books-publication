@@ -43,7 +43,7 @@
           <input id="hero-email" name="email" type="email" placeholder="Email Address" value="{{ old('email') }}" required>
           <label class="sr-only" for="hero-message">About Your Project</label>
           <textarea id="hero-message" name="message" placeholder="About Your Project" rows="4" required>{{ old('message') }}</textarea>
-          <button type="submit" class="btn btn-primary btn-block">Get Started</button>
+          <button type="submit" class="btn btn-primary btn-block">Send Email</button>
         </form>
       </div>
     </div>
@@ -400,7 +400,7 @@
           <input id="cta-email" name="email" type="email" placeholder="Email Address" value="{{ old('email') }}" required>
           <label class="sr-only" for="cta-message">About Your Project</label>
           <textarea id="cta-message" name="message" placeholder="About Your Project" rows="4" required>{{ old('message') }}</textarea>
-          <button type="submit" class="btn btn-primary btn-block">Get Started</button>
+          <button type="submit" class="btn btn-primary btn-block">Send Email</button>
         </form>
       </div>
     </div>

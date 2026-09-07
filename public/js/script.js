@@ -164,6 +164,17 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  /* ---------- Disable submit button while the email is sending ---------- */
+  document.querySelectorAll('.contact-form').forEach(form => {
+    form.addEventListener('submit', () => {
+      const btn = form.querySelector('button[type="submit"]');
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = 'Sending…';
+      }
+    });
+  });
+
   /* ---------- Footer year ---------- */
   const yearEl = document.getElementById('year');
   if (yearEl) yearEl.textContent = new Date().getFullYear();

@@ -75,7 +75,7 @@
           </select>
           <label class="sr-only" for="contact-message">About Your Project</label>
           <textarea id="contact-message" name="message" placeholder="About Your Project" rows="4" required>{{ old('message') }}</textarea>
-          <button type="submit" class="btn btn-primary btn-block">Get Started</button>
+          <button type="submit" class="btn btn-primary btn-block">Send Email</button>
         </form>
       </div>
     </div>
