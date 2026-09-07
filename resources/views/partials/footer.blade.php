@@ -33,5 +33,6 @@
   <div class="container footer-bottom">
     <p>&copy; {{ date('Y') }} Infinite Books Publishing</p>
     <p>+1 (980) 223-4655 &middot; info@infinitebookspublishing.com</p>
+    <p>Designed &amp; built by <a href="https://zr-lab.netlify.app/" target="_blank" rel="noopener noreferrer">Zoobia Rafi</a></p>
   </div>
 </footer>
