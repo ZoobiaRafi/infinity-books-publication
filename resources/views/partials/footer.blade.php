@@ -2,7 +2,7 @@
   <div class="container footer-columns">
     <div class="footer-col footer-brand">
       <a href="{{ route('home') }}" class="logo">
-        <img src="{{ asset('assets/logo-mark.png') }}" alt="" class="logo-icon-img">
+        <img src="{{ asset('assets/favicon.png') }}" alt="" class="logo-icon-img">
       <span class="logo-text">Infinite Books <span class="accent">Publishing</span></span>
       </a>
       <p>From first draft to bookstore shelf — writing, editing, design, publishing and marketing under one roof.</p>

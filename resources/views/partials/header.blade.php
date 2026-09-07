@@ -2,7 +2,7 @@
 <header class="site-header" id="site-header">
   <div class="container header-inner">
     <a href="{{ route('home') }}" class="logo" aria-label="Infinite Books Publishing — home">
-      <img src="{{ asset('assets/logo-mark.png') }}" alt="" class="logo-icon-img">
+      <img src="{{ asset('assets/favicon.png') }}" alt="" class="logo-icon-img">
       <span class="logo-text">Infinite Books <span class="accent">Publishing</span></span>
     </a>
 
@@ -58,7 +58,7 @@
 <div class="mobile-nav" id="mobile-nav" aria-hidden="true">
     <div class="mobile-nav-head">
       <a href="{{ route('home') }}" class="logo">
-        <img src="{{ asset('assets/logo-mark.png') }}" alt="" class="logo-icon-img">
+        <img src="{{ asset('assets/favicon.png') }}" alt="" class="logo-icon-img">
       <span class="logo-text">Infinite Books <span class="accent">Publishing</span></span>
       </a>
       <button class="mobile-nav-close" id="mobile-nav-close" aria-label="Close menu">
