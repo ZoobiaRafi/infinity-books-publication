@@ -33,6 +33,9 @@
         @if (session('success'))
           <p class="form-success">{{ session('success') }}</p>
         @endif
+        @if ($errors->any())
+          <p class="form-success" style="color:#e5484d;">{{ $errors->first() }}</p>
+        @endif
         <form class="contact-form" method="POST" action="{{ route('contact.store') }}">
           @csrf
           <label class="sr-only" for="hero-name">Full Name</label>
@@ -41,6 +44,17 @@
           <input id="hero-phone" name="phone" type="tel" placeholder="Phone Number" value="{{ old('phone') }}" required>
           <label class="sr-only" for="hero-email">Email Address</label>
           <input id="hero-email" name="email" type="email" placeholder="Email Address" value="{{ old('email') }}" required>
+          <label class="sr-only" for="hero-service">Service of Interest</label>
+          <select id="hero-service" name="service" required style="width:100%;padding:0.85rem 1rem;background:var(--bg-alt);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--fg);">
+            <option value="" disabled {{ old('service') ? '' : 'selected' }}>Service of Interest</option>
+            <option {{ old('service') === 'Ghostwriting' ? 'selected' : '' }}>Ghostwriting</option>
+            <option {{ old('service') === 'Editing & Proofreading' ? 'selected' : '' }}>Editing &amp; Proofreading</option>
+            <option {{ old('service') === 'Cover Design & Illustration' ? 'selected' : '' }}>Cover Design &amp; Illustration</option>
+            <option {{ old('service') === 'Publishing & Distribution' ? 'selected' : '' }}>Publishing &amp; Distribution</option>
+            <option {{ old('service') === 'Book Marketing' ? 'selected' : '' }}>Book Marketing</option>
+            <option {{ old('service') === 'Audiobook Production' ? 'selected' : '' }}>Audiobook Production</option>
+            <option {{ old('service') === 'Not sure yet' ? 'selected' : '' }}>Not sure yet</option>
+          </select>
           <label class="sr-only" for="hero-message">About Your Project</label>
           <textarea id="hero-message" name="message" placeholder="About Your Project" rows="4" required>{{ old('message') }}</textarea>
           <button type="submit" class="btn btn-primary btn-block">Send Email</button>
@@ -390,6 +404,9 @@
         @if (session('success'))
           <p class="form-success">{{ session('success') }}</p>
         @endif
+        @if ($errors->any())
+          <p class="form-success" style="color:#e5484d;">{{ $errors->first() }}</p>
+        @endif
         <form class="contact-form" method="POST" action="{{ route('contact.store') }}">
           @csrf
           <label class="sr-only" for="cta-name">Full Name</label>
@@ -398,6 +415,17 @@
           <input id="cta-phone" name="phone" type="tel" placeholder="Phone Number" value="{{ old('phone') }}" required>
           <label class="sr-only" for="cta-email">Email Address</label>
           <input id="cta-email" name="email" type="email" placeholder="Email Address" value="{{ old('email') }}" required>
+          <label class="sr-only" for="cta-service">Service of Interest</label>
+          <select id="cta-service" name="service" required style="width:100%;padding:0.85rem 1rem;background:var(--bg-alt);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--fg);">
+            <option value="" disabled {{ old('service') ? '' : 'selected' }}>Service of Interest</option>
+            <option {{ old('service') === 'Ghostwriting' ? 'selected' : '' }}>Ghostwriting</option>
+            <option {{ old('service') === 'Editing & Proofreading' ? 'selected' : '' }}>Editing &amp; Proofreading</option>
+            <option {{ old('service') === 'Cover Design & Illustration' ? 'selected' : '' }}>Cover Design &amp; Illustration</option>
+            <option {{ old('service') === 'Publishing & Distribution' ? 'selected' : '' }}>Publishing &amp; Distribution</option>
+            <option {{ old('service') === 'Book Marketing' ? 'selected' : '' }}>Book Marketing</option>
+            <option {{ old('service') === 'Audiobook Production' ? 'selected' : '' }}>Audiobook Production</option>
+            <option {{ old('service') === 'Not sure yet' ? 'selected' : '' }}>Not sure yet</option>
+          </select>
           <label class="sr-only" for="cta-message">About Your Project</label>
           <textarea id="cta-message" name="message" placeholder="About Your Project" rows="4" required>{{ old('message') }}</textarea>
           <button type="submit" class="btn btn-primary btn-block">Send Email</button>

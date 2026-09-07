@@ -98,7 +98,7 @@ class FrontendController extends Controller
             'name' => ['required', 'string', 'max:255', 'regex:/^[^<>]+$/'],
             'phone' => ['required', 'string', 'max:50', 'regex:/^[0-9+\-\s().]+$/'],
             'email' => ['required', 'string', 'email:rfc', 'max:255'],
-            'service' => ['nullable', 'string', Rule::in([
+            'service' => ['required', 'string', Rule::in([
                 'Ghostwriting',
                 'Editing & Proofreading',
                 'Cover Design & Illustration',
