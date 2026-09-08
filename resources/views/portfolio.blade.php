@@ -20,14 +20,14 @@
     <div class="container">
       <div class="filter-bar" id="filter-bar">
         <button class="filter-btn is-active" data-filter="all">All</button>
-        @foreach ($services as $service)
-          <button class="filter-btn" data-filter="{{ $service->slug }}">{{ $service->nav_title }}</button>
+        @foreach ($categories as $category)
+          <button class="filter-btn" data-filter="{{ \Illuminate\Support\Str::slug($category) }}">{{ $category }}</button>
         @endforeach
       </div>
 
       <div class="card-grid portfolio-grid" id="portfolio-full-grid">
         @foreach ($portfolioItems as $item)
-          <figure class="portfolio-card reveal" data-category="{{ $item->service->slug ?? '' }}">
+          <figure class="portfolio-card reveal" data-category="{{ \Illuminate\Support\Str::slug($item->category_label) }}">
             <img src="{{ asset($item->image) }}" alt="{{ $item->image_alt ?? $item->title }}" loading="lazy">
             <figcaption><span class="tag">{{ $item->category_label }}</span><span class="sub">{{ $item->subtitle }}</span></figcaption>
           </figure>

@@ -170,18 +170,12 @@
       </div>
       <div class="scroller">
         <div class="card-grid portfolio-grid">
-          <figure class="portfolio-card reveal">
-            <img src="{{ asset('assets/images/book-fiction.jpg') }}" alt="Fiction book cover — Literary &amp; Contemporary" loading="lazy">
-            <figcaption><span class="tag">Fiction</span><span class="sub">Literary &amp; Contemporary</span></figcaption>
-          </figure>
-          <figure class="portfolio-card reveal">
-            <img src="{{ asset('assets/images/book-children.jpg') }}" alt="Children's Books book cover — Illustrated Picture Books" loading="lazy">
-            <figcaption><span class="tag">Children's Books</span><span class="sub">Illustrated Picture Books</span></figcaption>
-          </figure>
-          <figure class="portfolio-card reveal">
-            <img src="{{ asset('assets/images/book-memoir.jpg') }}" alt="Memoir book cover — Biography &amp; Life Stories" loading="lazy">
-            <figcaption><span class="tag">Memoir</span><span class="sub">Biography &amp; Life Stories</span></figcaption>
-          </figure>
+          @foreach ($portfolioItems as $item)
+            <figure class="portfolio-card reveal">
+              <img src="{{ asset($item->image) }}" alt="{{ $item->image_alt ?? $item->title }}" loading="lazy">
+              <figcaption><span class="tag">{{ $item->category_label }}</span><span class="sub">{{ $item->subtitle }}</span></figcaption>
+            </figure>
+          @endforeach
         </div>
       </div>
       <p class="swipe-hint">Swipe to explore →</p>

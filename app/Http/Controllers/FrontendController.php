@@ -19,7 +19,10 @@ class FrontendController extends Controller
 {
     public function home(): View
     {
-        return view('home', ['active' => 'home']);
+        return view('home', [
+            'active' => 'home',
+            'portfolioItems' => PortfolioItem::orderBy('order')->get()->unique('category_label')->values(),
+        ]);
     }
 
     public function about(): View
@@ -52,10 +55,12 @@ class FrontendController extends Controller
 
     public function portfolio(): View
     {
+        $portfolioItems = PortfolioItem::with('service')->orderBy('order')->get();
+
         return view('portfolio', [
             'active' => 'portfolio',
-            'portfolioItems' => PortfolioItem::with('service')->orderBy('order')->get(),
-            'services' => Service::orderBy('order')->orderBy('id')->get(),
+            'portfolioItems' => $portfolioItems,
+            'categories' => $portfolioItems->pluck('category_label')->unique()->values(),
         ]);
     }
 
