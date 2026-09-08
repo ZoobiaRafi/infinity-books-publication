@@ -685,6 +685,8 @@ body.nav-open { overflow: hidden; }
 
 @media (max-width: 860px) {
   .footer-columns { grid-template-columns: 1fr 1fr; gap: 2rem; }
+  .footer-brand .logo-icon-img { height: 36px; }
+  .footer-brand .logo-text { font-size: 1.05rem; }
   .footer-brand { grid-column: 1 / -1; }
   .page-hero { padding-top: calc(var(--header-h) + 2rem); }
 }
