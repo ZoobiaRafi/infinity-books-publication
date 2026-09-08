@@ -644,13 +644,29 @@ body.nav-open { overflow: hidden; }
   .stats-grid { grid-template-columns: repeat(2, 1fr); }
   .check-list.two-col { grid-template-columns: 1fr; }
 
-  /* Horizontal "swipe to explore" scroller on small screens */
+  /* Horizontal "swipe to explore" scroller on small screens — only for
+     card-grids actually wrapped in a .scroller (the home page preview
+     sections). A bare .card-grid on a full listing page (services index,
+     about, testimonials, portfolio) has no .scroller ancestor to provide
+     overflow-x, so forcing it into a flex row here made its cards run off
+     the right edge of the screen with no way to reach them. */
   .scroller { overflow-x: auto; margin-inline: -1.5rem; padding-inline: 1.5rem; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; }
   .scroller::-webkit-scrollbar { display: none; }
-  .card-grid { display: flex; gap: 1.1rem; }
-  .services-grid > *, .why-grid > *, .process-grid > *, .reviews-grid > * { min-width: 78%; scroll-snap-align: start; }
-  .portfolio-grid > * { min-width: 62%; scroll-snap-align: start; }
-  .packages-grid > * { min-width: 86%; scroll-snap-align: start; }
+  .scroller .card-grid { display: flex; gap: 1.1rem; }
+  .scroller .services-grid > *, .scroller .why-grid > *, .scroller .process-grid > *, .scroller .reviews-grid > * { min-width: 78%; scroll-snap-align: start; }
+  .scroller .portfolio-grid > * { min-width: 62%; scroll-snap-align: start; }
+  .scroller .packages-grid > * { min-width: 86%; scroll-snap-align: start; }
+
+  /* Full listing pages (not wrapped in .scroller) just stack to one
+     column instead. */
+  .services-grid, .why-grid, .portfolio-grid, .reviews-grid, .process-grid, .packages-grid {
+    grid-template-columns: 1fr;
+  }
+  .scroller .services-grid, .scroller .why-grid, .scroller .portfolio-grid,
+  .scroller .reviews-grid, .scroller .process-grid, .scroller .packages-grid {
+    grid-template-columns: none;
+  }
+
   .price-card-featured { transform: none; }
   .swipe-hint { display: block; }
 
