@@ -638,6 +638,7 @@ body.nav-open { overflow: hidden; }
   .mobile-nav { display: block; }
   .mobile-nav-backdrop { display: block; }
   .header-cta { display: none; }
+  .site-header .logo-text { font-size: 1.05rem; }
 
   .stats-grid { grid-template-columns: repeat(2, 1fr); }
   .check-list.two-col { grid-template-columns: 1fr; }
