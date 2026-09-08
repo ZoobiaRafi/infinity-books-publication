@@ -19,13 +19,13 @@
   <section class="section">
     <div class="container">
       <div class="card-grid blog-grid">
-        @foreach ($posts as $slug => $post)
-          <a class="blog-card reveal" href="{{ route('blog.show', $slug) }}">
-            <img src="{{ asset($post['cover']) }}" alt="{{ $post['title'] }}">
+        @foreach ($posts as $post)
+          <a class="blog-card reveal" href="{{ route('blog.show', $post->slug) }}">
+            <img src="{{ asset($post->cover) }}" alt="{{ $post->title }}">
             <div class="blog-card-body">
-              <span class="blog-meta">{{ $post['category'] }} &middot; {{ $post['read_time'] }}</span>
-              <h3>{{ $post['title'] }}</h3>
-              <p>{{ $post['excerpt'] }}</p>
+              <span class="blog-meta">{{ $post->category }} &middot; {{ $post->read_time }}</span>
+              <h3>{{ $post->title }}</h3>
+              <p>{{ $post->excerpt }}</p>
               <span class="blog-readmore">Read Article
                 <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
               </span>
