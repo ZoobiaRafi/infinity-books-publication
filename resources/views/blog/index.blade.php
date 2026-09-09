@@ -21,7 +21,7 @@
       <div class="card-grid blog-grid">
         @foreach ($posts as $post)
           <a class="blog-card reveal" href="{{ route('blog.show', $post->slug) }}">
-            <img src="{{ asset($post->cover) }}" alt="{{ $post->title }}">
+            <img src="{{ $post->cover_url }}" alt="{{ $post->title }}">
             <div class="blog-card-body">
               <span class="blog-meta">{{ $post->category }} &middot; {{ $post->read_time }}</span>
               <h3>{{ $post->title }}</h3>

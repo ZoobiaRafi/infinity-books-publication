@@ -2,12 +2,15 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\ResolvesUploadedImageUrl;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
 
 class Service extends Model
 {
+    use ResolvesUploadedImageUrl;
+
     public function portfolioItems(): HasMany
     {
         return $this->hasMany(PortfolioItem::class)->orderBy('order');
@@ -113,6 +116,11 @@ class Service extends Model
             })
             ->values()
             ->all();
+    }
+
+    protected function getImageUrlAttribute(): ?string
+    {
+        return $this->resolveImageUrl($this->image);
     }
 
     /**

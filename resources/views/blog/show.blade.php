@@ -19,7 +19,7 @@
       <h1>{{ $post->title }}</h1>
 
       <div class="post-cover">
-        <img src="{{ asset($post->cover) }}" alt="{{ $post->title }}">
+        <img src="{{ $post->cover_url }}" alt="{{ $post->title }}">
       </div>
 
       {!! $post->body !!}
@@ -38,7 +38,7 @@
         <div class="card-grid portfolio-grid">
           @foreach ($relatedBooks as $item)
             <figure class="portfolio-card reveal">
-              <img src="{{ asset($item->image) }}" alt="{{ $item->image_alt ?? $item->title }}" loading="lazy">
+              <img src="{{ $item->image_url }}" alt="{{ $item->image_alt ?? $item->title }}" loading="lazy">
               <figcaption><span class="tag">{{ $item->category_label }}</span><span class="sub">{{ $item->subtitle }}</span></figcaption>
             </figure>
           @endforeach

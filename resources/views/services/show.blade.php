@@ -34,7 +34,7 @@
       </div>
       @if ($service['image'])
         <div class="info-image reveal">
-          <img src="{{ asset($service['image']) }}" alt="{{ $service['image_alt'] }}">
+          <img src="{{ $service['image_url'] }}" alt="{{ $service['image_alt'] }}">
         </div>
       @endif
     </div>
@@ -69,7 +69,7 @@
         <div class="card-grid portfolio-grid">
           @foreach ($service['portfolioItems'] as $item)
             <figure class="portfolio-card reveal">
-              <img src="{{ asset($item->image) }}" alt="{{ $item->image_alt ?? $item->title }}" loading="lazy">
+              <img src="{{ $item->image_url }}" alt="{{ $item->image_alt ?? $item->title }}" loading="lazy">
               <figcaption><span class="tag">{{ $item->category_label }}</span><span class="sub">{{ $item->subtitle }}</span></figcaption>
             </figure>
           @endforeach

@@ -2,12 +2,15 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\ResolvesUploadedImageUrl;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Str;
 
 class BlogPost extends Model
 {
+    use ResolvesUploadedImageUrl;
+
     protected $fillable = [
         'order',
         'slug',
@@ -26,6 +29,11 @@ class BlogPost extends Model
     public function relatedServices(): BelongsToMany
     {
         return $this->belongsToMany(Service::class, 'blog_post_service');
+    }
+
+    protected function getCoverUrlAttribute(): ?string
+    {
+        return $this->resolveImageUrl($this->cover);
     }
 
     protected static function booted(): void
