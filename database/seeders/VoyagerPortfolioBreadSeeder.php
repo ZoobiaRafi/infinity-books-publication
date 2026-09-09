@@ -87,7 +87,7 @@ class VoyagerPortfolioBreadSeeder extends Seeder
     {
         return [
             ['field' => 'order', 'type' => 'number', 'display_name' => 'Order', 'required' => 0, 'browse' => 1, 'read' => 0, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => (object) []],
-            ['field' => 'title', 'type' => 'text', 'display_name' => 'Title', 'required' => 1, 'browse' => 1, 'read' => 1, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => ['placeholder' => 'e.g. the book or project name']],
+            ['field' => 'title', 'type' => 'text', 'display_name' => 'Title', 'required' => 1, 'browse' => 1, 'read' => 1, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => $this->required(['placeholder' => 'e.g. the book or project name'])],
             // Voyager's belongsTo-relationship convention needs TWO rows:
             // - a plain row named after the actual DB column ("service_id"),
             //   which is what really gets saved (VoyagerBaseController's
@@ -110,12 +110,44 @@ class VoyagerPortfolioBreadSeeder extends Seeder
                 'key' => 'id',
                 'label' => 'nav_title',
             ]],
-            ['field' => 'category_label', 'type' => 'text', 'display_name' => 'Category Tag', 'required' => 1, 'browse' => 1, 'read' => 1, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => ['placeholder' => 'Short badge shown on the card, e.g. "Fiction"']],
+            ['field' => 'category_label', 'type' => 'text', 'display_name' => 'Category Tag', 'required' => 1, 'browse' => 1, 'read' => 1, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => $this->required(['placeholder' => 'Short badge shown on the card, e.g. "Fiction"'])],
             ['field' => 'subtitle', 'type' => 'text', 'display_name' => 'Subtitle', 'required' => 0, 'browse' => 0, 'read' => 1, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => ['placeholder' => 'e.g. "Literary & Contemporary"']],
-            ['field' => 'image', 'type' => 'image', 'display_name' => 'Image', 'required' => 1, 'browse' => 1, 'read' => 1, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => (object) []],
+            ['field' => 'image', 'type' => 'image', 'display_name' => 'Image', 'required' => 1, 'browse' => 1, 'read' => 1, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => $this->requiredOnAdd()],
             ['field' => 'image_alt', 'type' => 'text', 'display_name' => 'Image Alt Text', 'required' => 0, 'browse' => 0, 'read' => 1, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => (object) []],
             ['field' => 'created_at', 'type' => 'timestamp', 'display_name' => 'Created At', 'required' => 0, 'browse' => 0, 'read' => 1, 'edit' => 0, 'add' => 0, 'delete' => 0, 'details' => (object) []],
             ['field' => 'updated_at', 'type' => 'timestamp', 'display_name' => 'Updated At', 'required' => 0, 'browse' => 0, 'read' => 1, 'edit' => 0, 'add' => 0, 'delete' => 0, 'details' => (object) []],
         ];
+    }
+
+    /**
+     * Voyager's `required` column on a data_row is cosmetic only (just an
+     * asterisk in the form) — it does NOT get enforced by the store/update
+     * validator. Real enforcement needs `details.validation.rule`, which is
+     * what this attaches. Without it, leaving a "required" field blank
+     * sails past Voyager and crashes on the database's NOT NULL constraint
+     * instead of showing a normal validation error.
+     */
+    private function required(array $details = []): object
+    {
+        return (object) array_merge($details, [
+            'validation' => (object) ['rule' => ['required']],
+        ]);
+    }
+
+    /**
+     * Same as required(), but for an image field where forcing 'required'
+     * unconditionally would also block every edit that doesn't re-upload a
+     * new file (Voyager never pre-fills a file input, so the field is
+     * always empty on the edit form even though the existing image is kept).
+     * Required only on Add; merely validated-as-an-image on Edit.
+     */
+    private function requiredOnAdd(array $details = []): object
+    {
+        return (object) array_merge($details, [
+            'validation' => (object) [
+                'rule' => ['image'],
+                'add' => (object) ['rule' => ['required']],
+            ],
+        ]);
     }
 }

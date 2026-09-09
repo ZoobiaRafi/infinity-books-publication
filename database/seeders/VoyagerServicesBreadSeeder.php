@@ -87,24 +87,24 @@ class VoyagerServicesBreadSeeder extends Seeder
     {
         return [
             ['field' => 'order', 'type' => 'number', 'display_name' => 'Order', 'required' => 0, 'browse' => 1, 'read' => 0, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => (object) []],
-            ['field' => 'nav_title', 'type' => 'text', 'display_name' => 'Nav / Card Title', 'required' => 1, 'browse' => 1, 'read' => 1, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => (object) []],
+            ['field' => 'nav_title', 'type' => 'text', 'display_name' => 'Nav / Card Title', 'required' => 1, 'browse' => 1, 'read' => 1, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => $this->required()],
             ['field' => 'slug', 'type' => 'text', 'display_name' => 'Slug', 'required' => 1, 'browse' => 1, 'read' => 1, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => ['placeholder' => 'Auto-generated from the Nav / Card Title — edit only if you need a different URL', 'slugify' => ['origin' => 'nav_title']]],
-            ['field' => 'summary', 'type' => 'text_area', 'display_name' => 'Card Summary', 'required' => 1, 'browse' => 0, 'read' => 1, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => ['placeholder' => 'Write a brief summary / one-liner shown on the services grid card']],
+            ['field' => 'summary', 'type' => 'text_area', 'display_name' => 'Card Summary', 'required' => 1, 'browse' => 0, 'read' => 1, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => $this->required(['placeholder' => 'Write a brief summary / one-liner shown on the services grid card'])],
             ['field' => 'icon', 'type' => 'icon_picker', 'display_name' => 'Icon', 'required' => 0, 'browse' => 0, 'read' => 1, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => (object) []],
-            ['field' => 'title', 'type' => 'text', 'display_name' => 'Page Title', 'required' => 1, 'browse' => 0, 'read' => 1, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => ['placeholder' => 'e.g. "Ghostwriting That Sounds Like "']],
+            ['field' => 'title', 'type' => 'text', 'display_name' => 'Page Title', 'required' => 1, 'browse' => 0, 'read' => 1, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => $this->required(['placeholder' => 'e.g. "Ghostwriting That Sounds Like "'])],
             ['field' => 'title_accent', 'type' => 'text', 'display_name' => 'Page Title (accent word)', 'required' => 0, 'browse' => 0, 'read' => 1, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => ['placeholder' => 'e.g. "You" — highlighted in orange after the title']],
-            ['field' => 'meta_description', 'type' => 'text_area', 'display_name' => 'Meta Description', 'required' => 1, 'browse' => 0, 'read' => 1, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => (object) []],
-            ['field' => 'lede', 'type' => 'text_area', 'display_name' => 'Hero Paragraph', 'required' => 1, 'browse' => 0, 'read' => 1, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => (object) []],
-            ['field' => 'included_heading', 'type' => 'text', 'display_name' => '"What\'s Included" Heading', 'required' => 1, 'browse' => 0, 'read' => 1, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => (object) []],
-            ['field' => 'included_text', 'type' => 'text_area', 'display_name' => '"What\'s Included" Paragraph', 'required' => 1, 'browse' => 0, 'read' => 1, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => (object) []],
-            ['field' => 'included_list', 'type' => 'text_area', 'display_name' => 'Included Checklist', 'required' => 1, 'browse' => 0, 'read' => 1, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => ['placeholder' => 'One checklist item per line']],
+            ['field' => 'meta_description', 'type' => 'text_area', 'display_name' => 'Meta Description', 'required' => 1, 'browse' => 0, 'read' => 1, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => $this->required()],
+            ['field' => 'lede', 'type' => 'text_area', 'display_name' => 'Hero Paragraph', 'required' => 1, 'browse' => 0, 'read' => 1, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => $this->required()],
+            ['field' => 'included_heading', 'type' => 'text', 'display_name' => '"What\'s Included" Heading', 'required' => 1, 'browse' => 0, 'read' => 1, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => $this->required()],
+            ['field' => 'included_text', 'type' => 'text_area', 'display_name' => '"What\'s Included" Paragraph', 'required' => 1, 'browse' => 0, 'read' => 1, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => $this->required()],
+            ['field' => 'included_list', 'type' => 'text_area', 'display_name' => 'Included Checklist', 'required' => 1, 'browse' => 0, 'read' => 1, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => $this->required(['placeholder' => 'One checklist item per line'])],
             ['field' => 'image', 'type' => 'image', 'display_name' => 'Image', 'required' => 0, 'browse' => 1, 'read' => 1, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => (object) []],
             ['field' => 'image_alt', 'type' => 'text', 'display_name' => 'Image Alt Text', 'required' => 0, 'browse' => 0, 'read' => 1, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => (object) []],
-            ['field' => 'process_heading', 'type' => 'text', 'display_name' => '"How It Works" Heading', 'required' => 1, 'browse' => 0, 'read' => 1, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => (object) []],
-            ['field' => 'steps', 'type' => 'text_area', 'display_name' => 'Process Steps', 'required' => 1, 'browse' => 0, 'read' => 1, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => ['placeholder' => "One step per line, formatted as: Step Title|Step description text"]],
-            ['field' => 'cta_eyebrow', 'type' => 'text', 'display_name' => 'CTA Eyebrow', 'required' => 1, 'browse' => 0, 'read' => 1, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => (object) []],
-            ['field' => 'cta_heading', 'type' => 'text', 'display_name' => 'CTA Heading', 'required' => 1, 'browse' => 0, 'read' => 1, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => (object) []],
-            ['field' => 'cta_text', 'type' => 'text_area', 'display_name' => 'CTA Paragraph', 'required' => 1, 'browse' => 0, 'read' => 1, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => (object) []],
+            ['field' => 'process_heading', 'type' => 'text', 'display_name' => '"How It Works" Heading', 'required' => 1, 'browse' => 0, 'read' => 1, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => $this->required()],
+            ['field' => 'steps', 'type' => 'text_area', 'display_name' => 'Process Steps', 'required' => 1, 'browse' => 0, 'read' => 1, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => $this->required(['placeholder' => "One step per line, formatted as: Step Title|Step description text"])],
+            ['field' => 'cta_eyebrow', 'type' => 'text', 'display_name' => 'CTA Eyebrow', 'required' => 1, 'browse' => 0, 'read' => 1, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => $this->required()],
+            ['field' => 'cta_heading', 'type' => 'text', 'display_name' => 'CTA Heading', 'required' => 1, 'browse' => 0, 'read' => 1, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => $this->required()],
+            ['field' => 'cta_text', 'type' => 'text_area', 'display_name' => 'CTA Paragraph', 'required' => 1, 'browse' => 0, 'read' => 1, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => $this->required()],
             ['field' => 'faq_question_1', 'type' => 'text', 'display_name' => 'FAQ 1 — Question', 'required' => 0, 'browse' => 0, 'read' => 1, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => ['placeholder' => 'Leave both FAQ 1 fields blank to skip this FAQ']],
             ['field' => 'faq_answer_1', 'type' => 'text_area', 'display_name' => 'FAQ 1 — Answer', 'required' => 0, 'browse' => 0, 'read' => 1, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => (object) []],
             ['field' => 'faq_question_2', 'type' => 'text', 'display_name' => 'FAQ 2 — Question', 'required' => 0, 'browse' => 0, 'read' => 1, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => (object) []],
@@ -118,5 +118,20 @@ class VoyagerServicesBreadSeeder extends Seeder
             ['field' => 'created_at', 'type' => 'timestamp', 'display_name' => 'Created At', 'required' => 0, 'browse' => 0, 'read' => 1, 'edit' => 0, 'add' => 0, 'delete' => 0, 'details' => (object) []],
             ['field' => 'updated_at', 'type' => 'timestamp', 'display_name' => 'Updated At', 'required' => 0, 'browse' => 0, 'read' => 1, 'edit' => 0, 'add' => 0, 'delete' => 0, 'details' => (object) []],
         ];
+    }
+
+    /**
+     * Voyager's `required` column on a data_row is cosmetic only (just an
+     * asterisk in the form) — it does NOT get enforced by the store/update
+     * validator. Real enforcement needs `details.validation.rule`, which is
+     * what this attaches. Without it, leaving a "required" field blank
+     * sails past Voyager and crashes on the database's NOT NULL constraint
+     * instead of showing a normal validation error.
+     */
+    private function required(array $details = []): object
+    {
+        return (object) array_merge($details, [
+            'validation' => (object) ['rule' => ['required']],
+        ]);
     }
 }

@@ -87,17 +87,17 @@ class VoyagerBlogBreadSeeder extends Seeder
     {
         return [
             ['field' => 'order', 'type' => 'number', 'display_name' => 'Order', 'required' => 0, 'browse' => 1, 'read' => 0, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => (object) []],
-            ['field' => 'title', 'type' => 'text', 'display_name' => 'Title', 'required' => 1, 'browse' => 1, 'read' => 1, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => ['placeholder' => 'e.g. "Choosing the Right Ghostwriter for Your Story"']],
+            ['field' => 'title', 'type' => 'text', 'display_name' => 'Title', 'required' => 1, 'browse' => 1, 'read' => 1, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => $this->required(['placeholder' => 'e.g. "Choosing the Right Ghostwriter for Your Story"'])],
             ['field' => 'slug', 'type' => 'text', 'display_name' => 'Slug', 'required' => 1, 'browse' => 1, 'read' => 1, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => ['placeholder' => 'Auto-generated from the Title — edit only if you need a different URL', 'slugify' => ['origin' => 'title']]],
-            ['field' => 'category', 'type' => 'text', 'display_name' => 'Category', 'required' => 1, 'browse' => 1, 'read' => 1, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => ['placeholder' => 'e.g. "Ghostwriting", "Publishing", "Marketing"']],
-            ['field' => 'read_time', 'type' => 'text', 'display_name' => 'Read Time', 'required' => 1, 'browse' => 0, 'read' => 1, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => ['placeholder' => 'e.g. "6 min read"']],
-            ['field' => 'excerpt', 'type' => 'text_area', 'display_name' => 'Excerpt', 'required' => 1, 'browse' => 0, 'read' => 1, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => ['placeholder' => 'Short summary shown on the blog grid card']],
-            ['field' => 'meta_description', 'type' => 'text_area', 'display_name' => 'Meta Description', 'required' => 1, 'browse' => 0, 'read' => 1, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => (object) []],
-            ['field' => 'cover', 'type' => 'image', 'display_name' => 'Cover Image', 'required' => 1, 'browse' => 1, 'read' => 1, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => (object) []],
-            ['field' => 'body', 'type' => 'rich_text_box', 'display_name' => 'Body', 'required' => 1, 'browse' => 0, 'read' => 1, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => (object) []],
-            ['field' => 'cta_eyebrow', 'type' => 'text', 'display_name' => 'CTA Eyebrow', 'required' => 1, 'browse' => 0, 'read' => 1, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => (object) []],
-            ['field' => 'cta_heading', 'type' => 'text', 'display_name' => 'CTA Heading', 'required' => 1, 'browse' => 0, 'read' => 1, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => (object) []],
-            ['field' => 'cta_text', 'type' => 'text_area', 'display_name' => 'CTA Paragraph', 'required' => 1, 'browse' => 0, 'read' => 1, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => (object) []],
+            ['field' => 'category', 'type' => 'text', 'display_name' => 'Category', 'required' => 1, 'browse' => 1, 'read' => 1, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => $this->required(['placeholder' => 'e.g. "Ghostwriting", "Publishing", "Marketing"'])],
+            ['field' => 'read_time', 'type' => 'text', 'display_name' => 'Read Time', 'required' => 1, 'browse' => 0, 'read' => 1, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => $this->required(['placeholder' => 'e.g. "6 min read"'])],
+            ['field' => 'excerpt', 'type' => 'text_area', 'display_name' => 'Excerpt', 'required' => 1, 'browse' => 0, 'read' => 1, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => $this->required(['placeholder' => 'Short summary shown on the blog grid card'])],
+            ['field' => 'meta_description', 'type' => 'text_area', 'display_name' => 'Meta Description', 'required' => 1, 'browse' => 0, 'read' => 1, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => $this->required()],
+            ['field' => 'cover', 'type' => 'image', 'display_name' => 'Cover Image', 'required' => 1, 'browse' => 1, 'read' => 1, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => $this->requiredOnAdd()],
+            ['field' => 'body', 'type' => 'rich_text_box', 'display_name' => 'Body', 'required' => 1, 'browse' => 0, 'read' => 1, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => $this->required()],
+            ['field' => 'cta_eyebrow', 'type' => 'text', 'display_name' => 'CTA Eyebrow', 'required' => 1, 'browse' => 0, 'read' => 1, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => $this->required()],
+            ['field' => 'cta_heading', 'type' => 'text', 'display_name' => 'CTA Heading', 'required' => 1, 'browse' => 0, 'read' => 1, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => $this->required()],
+            ['field' => 'cta_text', 'type' => 'text_area', 'display_name' => 'CTA Paragraph', 'required' => 1, 'browse' => 0, 'read' => 1, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => $this->required()],
             // Same two-row belongsTo convention as VoyagerPortfolioBreadSeeder —
             // see the comment there for why the hidden column row and the
             // relationship row need different `field` names.
@@ -110,9 +110,41 @@ class VoyagerBlogBreadSeeder extends Seeder
                 'key' => 'id',
                 'label' => 'nav_title',
             ]],
-            ['field' => 'cta_button_text', 'type' => 'text', 'display_name' => 'CTA Button Text', 'required' => 1, 'browse' => 0, 'read' => 1, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => ['placeholder' => 'e.g. "Explore Ghostwriting Services"']],
+            ['field' => 'cta_button_text', 'type' => 'text', 'display_name' => 'CTA Button Text', 'required' => 1, 'browse' => 0, 'read' => 1, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => $this->required(['placeholder' => 'e.g. "Explore Ghostwriting Services"'])],
             ['field' => 'created_at', 'type' => 'timestamp', 'display_name' => 'Created At', 'required' => 0, 'browse' => 0, 'read' => 1, 'edit' => 0, 'add' => 0, 'delete' => 0, 'details' => (object) []],
             ['field' => 'updated_at', 'type' => 'timestamp', 'display_name' => 'Updated At', 'required' => 0, 'browse' => 0, 'read' => 1, 'edit' => 0, 'add' => 0, 'delete' => 0, 'details' => (object) []],
         ];
+    }
+
+    /**
+     * Voyager's `required` column on a data_row is cosmetic only (just an
+     * asterisk in the form) — it does NOT get enforced by the store/update
+     * validator. Real enforcement needs `details.validation.rule`, which is
+     * what this attaches. Without it, leaving a "required" field blank
+     * sails past Voyager and crashes on the database's NOT NULL constraint
+     * instead of showing a normal validation error.
+     */
+    private function required(array $details = []): object
+    {
+        return (object) array_merge($details, [
+            'validation' => (object) ['rule' => ['required']],
+        ]);
+    }
+
+    /**
+     * Same as required(), but for an image field where forcing 'required'
+     * unconditionally would also block every edit that doesn't re-upload a
+     * new file (Voyager never pre-fills a file input, so the field is
+     * always empty on the edit form even though the existing image is kept).
+     * Required only on Add; merely validated-as-an-image on Edit.
+     */
+    private function requiredOnAdd(array $details = []): object
+    {
+        return (object) array_merge($details, [
+            'validation' => (object) [
+                'rule' => ['image'],
+                'add' => (object) ['rule' => ['required']],
+            ],
+        ]);
     }
 }
