@@ -19,10 +19,14 @@ class BlogPostsTableSeeder extends Seeder
 
         foreach ($this->data() as $order => $row) {
             $row['order'] = $order + 1;
-            $row['cta_service_id'] = $serviceIds[$row['cta_service_slug']] ?? null;
+            $relatedServiceSlug = $row['cta_service_slug'];
             unset($row['cta_service_slug']);
 
-            BlogPost::updateOrCreate(['slug' => $row['slug']], $row);
+            $post = BlogPost::updateOrCreate(['slug' => $row['slug']], $row);
+
+            if (isset($serviceIds[$relatedServiceSlug])) {
+                $post->relatedServices()->sync([$serviceIds[$relatedServiceSlug]]);
+            }
         }
     }
 
@@ -71,7 +75,6 @@ class BlogPostsTableSeeder extends Seeder
                 'cta_heading' => "Let's Find Your Ghostwriter",
                 'cta_text' => 'Every writer on our team is vetted, genre-matched and available for a paid sample chapter first.',
                 'cta_service_slug' => 'ghostwriting',
-                'cta_button_text' => 'Explore Ghostwriting Services',
             ],
             [
                 'slug' => 'traditional-vs-self-publishing',
@@ -111,7 +114,6 @@ class BlogPostsTableSeeder extends Seeder
                 'cta_heading' => "Let's Map It Out Together",
                 'cta_text' => "We'll walk through your goals and recommend the publishing route that fits your book.",
                 'cta_service_slug' => 'publishing-distribution',
-                'cta_button_text' => 'Explore Publishing Services',
             ],
             [
                 'slug' => 'book-launch-marketing-checklist',
@@ -165,7 +167,6 @@ class BlogPostsTableSeeder extends Seeder
                 'cta_heading' => 'Let Us Build Your Marketing Timeline',
                 'cta_text' => "We'll build and run this checklist for you, end to end.",
                 'cta_service_slug' => 'book-marketing',
-                'cta_button_text' => 'Explore Marketing Services',
             ],
         ];
     }

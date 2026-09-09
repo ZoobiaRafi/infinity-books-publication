@@ -26,18 +26,25 @@
     </div>
   </article>
 
-  <!-- ================= CTA ================= -->
+  <!-- ================= CTA / RELATED BOOKS ================= -->
   <section class="section section-alt">
     <div class="container" style="text-align:center;">
       <p class="eyebrow center"><span class="eyebrow-line"></span>{{ $post->cta_eyebrow }}</p>
       <h2>{{ $post->cta_heading }}</h2>
-      <p class="section-lede" style="margin-bottom:2rem;">{{ $post->cta_text }}</p>
-      @if ($post->ctaService)
-        <a href="{{ route('services.show', $post->ctaService->slug) }}" class="btn btn-primary">{{ $post->cta_button_text }}
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
-        </a>
-      @endif
+      <p class="section-lede" @if ($relatedBooks->isEmpty()) style="margin-bottom:0;" @else style="margin-bottom:2rem;" @endif>{{ $post->cta_text }}</p>
     </div>
+    @if ($relatedBooks->isNotEmpty())
+      <div class="container">
+        <div class="card-grid portfolio-grid">
+          @foreach ($relatedBooks as $item)
+            <figure class="portfolio-card reveal">
+              <img src="{{ asset($item->image) }}" alt="{{ $item->image_alt ?? $item->title }}" loading="lazy">
+              <figcaption><span class="tag">{{ $item->category_label }}</span><span class="sub">{{ $item->subtitle }}</span></figcaption>
+            </figure>
+          @endforeach
+        </div>
+      </div>
+    @endif
   </section>
 
 @endsection

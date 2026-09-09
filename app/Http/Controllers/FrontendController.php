@@ -80,16 +80,21 @@ class FrontendController extends Controller
 
     public function blogShow(string $slug): View
     {
-        $post = BlogPost::with('ctaService')->where('slug', $slug)->first();
+        $post = BlogPost::with('relatedServices')->where('slug', $slug)->first();
 
         if (! $post) {
             throw new NotFoundHttpException();
         }
 
+        $relatedServiceIds = $post->relatedServices->pluck('id');
+
         return view('blog.show', [
             'active' => 'blog',
             'slug' => $slug,
             'post' => $post,
+            'relatedBooks' => $relatedServiceIds->isEmpty()
+                ? collect()
+                : PortfolioItem::whereIn('service_id', $relatedServiceIds)->orderBy('order')->get(),
         ]);
     }
 

@@ -98,19 +98,18 @@ class VoyagerBlogBreadSeeder extends Seeder
             ['field' => 'cta_eyebrow', 'type' => 'text', 'display_name' => 'CTA Eyebrow', 'required' => 1, 'browse' => 0, 'read' => 1, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => $this->required()],
             ['field' => 'cta_heading', 'type' => 'text', 'display_name' => 'CTA Heading', 'required' => 1, 'browse' => 0, 'read' => 1, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => $this->required()],
             ['field' => 'cta_text', 'type' => 'text_area', 'display_name' => 'CTA Paragraph', 'required' => 1, 'browse' => 0, 'read' => 1, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => $this->required()],
-            // Same two-row belongsTo convention as VoyagerPortfolioBreadSeeder —
-            // see the comment there for why the hidden column row and the
-            // relationship row need different `field` names.
-            ['field' => 'cta_service_id', 'type' => 'hidden', 'display_name' => 'CTA Service (internal)', 'required' => 0, 'browse' => 0, 'read' => 0, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => (object) []],
-            ['field' => 'cta_service', 'type' => 'relationship', 'display_name' => 'CTA Service', 'required' => 0, 'browse' => 0, 'read' => 1, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => [
+            // belongsToMany needs only a single relationship-type row — unlike
+            // belongsTo, there's no separate hidden column to fight over: the
+            // multi-select posts its values under this row's own `field`
+            // name, and Voyager syncs them into the pivot table after save.
+            ['field' => 'related_services', 'type' => 'relationship', 'display_name' => 'Related Services', 'required' => 0, 'browse' => 0, 'read' => 1, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => [
                 'model' => Service::class,
                 'table' => 'services',
-                'type' => 'belongsTo',
-                'column' => 'cta_service_id',
+                'type' => 'belongsToMany',
+                'pivot_table' => 'blog_post_service',
                 'key' => 'id',
                 'label' => 'nav_title',
             ]],
-            ['field' => 'cta_button_text', 'type' => 'text', 'display_name' => 'CTA Button Text', 'required' => 1, 'browse' => 0, 'read' => 1, 'edit' => 1, 'add' => 1, 'delete' => 0, 'details' => $this->required(['placeholder' => 'e.g. "Explore Ghostwriting Services"'])],
             ['field' => 'created_at', 'type' => 'timestamp', 'display_name' => 'Created At', 'required' => 0, 'browse' => 0, 'read' => 1, 'edit' => 0, 'add' => 0, 'delete' => 0, 'details' => (object) []],
             ['field' => 'updated_at', 'type' => 'timestamp', 'display_name' => 'Updated At', 'required' => 0, 'browse' => 0, 'read' => 1, 'edit' => 0, 'add' => 0, 'delete' => 0, 'details' => (object) []],
         ];

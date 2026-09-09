@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Str;
 
 class BlogPost extends Model
@@ -21,13 +21,11 @@ class BlogPost extends Model
         'cta_eyebrow',
         'cta_heading',
         'cta_text',
-        'cta_service_id',
-        'cta_button_text',
     ];
 
-    public function ctaService(): BelongsTo
+    public function relatedServices(): BelongsToMany
     {
-        return $this->belongsTo(Service::class, 'cta_service_id');
+        return $this->belongsToMany(Service::class, 'blog_post_service');
     }
 
     protected static function booted(): void
