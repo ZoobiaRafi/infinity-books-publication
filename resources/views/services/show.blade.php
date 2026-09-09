@@ -32,9 +32,11 @@
           @endforeach
         </ul>
       </div>
-      <div class="info-image reveal">
-        <img src="{{ asset($service['image']) }}" alt="{{ $service['image_alt'] }}">
-      </div>
+      @if ($service['image'])
+        <div class="info-image reveal">
+          <img src="{{ asset($service['image']) }}" alt="{{ $service['image_alt'] }}">
+        </div>
+      @endif
     </div>
   </section>
 
