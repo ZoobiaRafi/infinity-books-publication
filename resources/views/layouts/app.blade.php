@@ -5,6 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>@yield('title', 'Infinite Books Publishing — Turn Your Ideas into Bestselling Books')</title>
 <meta name="description" content="@yield('description', 'From first draft to bookstore shelf — writing, editing, design, publishing and marketing under one roof. A trusted US publishing company.')">
+{{--
+  Anchored to config('app.url') rather than the live request's host/scheme,
+  so the canonical value stays the same fixed non-www https URL regardless
+  of how a page was actually reached (e.g. www, which redirects before
+  Laravel ever sees the request, but this avoids depending on that holding
+  true forever). Google was treating www/non-www as unresolved duplicates
+  without this - see the commit that added it.
+--}}
+<link rel="canonical" href="{{ rtrim(config('app.url'), '/').'/'.ltrim(request()->path(), '/') }}">
 <link rel="icon" href="{{ asset('assets/favicon-32.png') }}" type="image/png" sizes="32x32">
 <link rel="icon" href="{{ asset('assets/favicon-16.png') }}" type="image/png" sizes="16x16">
 <link rel="apple-touch-icon" href="{{ asset('assets/apple-touch-icon.png') }}">
