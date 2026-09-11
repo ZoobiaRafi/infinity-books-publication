@@ -3,6 +3,12 @@
 use App\Http\Controllers\FrontendController;
 use Illuminate\Support\Facades\Route;
 
+// No physical public/favicon.ico exists on purpose - a static file at that
+// exact path would be served directly by the webserver and this route would
+// never be reached. Redirecting keeps the brand PNG as the single source of
+// truth instead of a separately-generated .ico that could go stale.
+Route::get('/favicon.ico', fn () => redirect(asset('assets/favicon-48.png'), 301));
+
 Route::get('/', [FrontendController::class, 'home'])->name('home');
 Route::get('/about', [FrontendController::class, 'about'])->name('about');
 
