@@ -2,6 +2,30 @@
 
 @section('title', $post->title.' — Infinite Books Publishing')
 @section('description', $post->meta_description)
+@section('og_type', 'article')
+@section('og_image', $post->cover_url)
+
+@push('structured-data')
+@php
+  $blogPostingSchema = [
+    '@context' => 'https://schema.org',
+    '@type' => 'BlogPosting',
+    'headline' => $post->title,
+    'description' => $post->meta_description,
+    'image' => $post->cover_url,
+    'datePublished' => $post->created_at->toAtomString(),
+    'dateModified' => $post->updated_at->toAtomString(),
+    'author' => ['@type' => 'Organization', 'name' => 'Infinite Books Publishing'],
+    'publisher' => [
+      '@type' => 'Organization',
+      'name' => 'Infinite Books Publishing',
+      'logo' => ['@type' => 'ImageObject', 'url' => asset('assets/favicon-48.png')],
+    ],
+    'mainEntityOfPage' => ['@type' => 'WebPage', '@id' => route('blog.show', $post->slug)],
+  ];
+@endphp
+<script type="application/ld+json">{!! json_encode($blogPostingSchema, JSON_UNESCAPED_SLASHES) !!}</script>
+@endpush
 
 @section('content')
 

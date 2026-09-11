@@ -5,15 +5,48 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>@yield('title', 'Infinite Books Publishing — Turn Your Ideas into Bestselling Books')</title>
 <meta name="description" content="@yield('description', 'From first draft to bookstore shelf — writing, editing, design, publishing and marketing under one roof. A trusted US publishing company.')">
-{{--
-  Anchored to config('app.url') rather than the live request's host/scheme,
-  so the canonical value stays the same fixed non-www https URL regardless
-  of how a page was actually reached (e.g. www, which redirects before
-  Laravel ever sees the request, but this avoids depending on that holding
-  true forever). Google was treating www/non-www as unresolved duplicates
-  without this - see the commit that added it.
---}}
-<link rel="canonical" href="{{ rtrim(config('app.url'), '/').'/'.ltrim(request()->path(), '/') }}">
+@php
+  // Anchored to config('app.url') rather than the live request's host/scheme,
+  // so this stays the same fixed non-www https URL regardless of how a page
+  // was actually reached (e.g. www, which redirects before Laravel ever sees
+  // the request, but this avoids depending on that holding true forever).
+  // No trailing slash on the root path specifically, matching what
+  // route('home') (used by every internal link and the sitemap) produces -
+  // a mismatched trailing slash here would just create a second,
+  // self-inflicted version of the exact duplicate-URL problem this exists
+  // to fix.
+  $requestPath = request()->path();
+  $canonicalUrl = $requestPath === '/'
+    ? rtrim(config('app.url'), '/')
+    : rtrim(config('app.url'), '/').'/'.$requestPath;
+
+  // Built as a PHP array and JSON-encoded below rather than hand-written -
+  // "@context"/"@type" as literal text would otherwise sit in a Blade
+  // template looking exactly like (unregistered, so harmless, but fragile)
+  // Blade directives.
+  $organizationSchema = [
+    '@context' => 'https://schema.org',
+    '@type' => 'Organization',
+    'name' => 'Infinite Books Publishing',
+    'url' => config('app.url'),
+    'logo' => asset('assets/favicon-48.png'),
+    'telephone' => '+1-980-223-4655',
+    'email' => 'info@infinitebookspublishing.com',
+  ];
+@endphp
+<link rel="canonical" href="{{ $canonicalUrl }}">
+<meta property="og:site_name" content="Infinite Books Publishing">
+<meta property="og:type" content="@yield('og_type', 'website')">
+<meta property="og:title" content="@yield('title', 'Infinite Books Publishing — Turn Your Ideas into Bestselling Books')">
+<meta property="og:description" content="@yield('description', 'From first draft to bookstore shelf — writing, editing, design, publishing and marketing under one roof. A trusted US publishing company.')">
+<meta property="og:url" content="{{ $canonicalUrl }}">
+<meta property="og:image" content="@yield('og_image', asset('assets/images/hero-desk.jpg'))">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="@yield('title', 'Infinite Books Publishing — Turn Your Ideas into Bestselling Books')">
+<meta name="twitter:description" content="@yield('description', 'From first draft to bookstore shelf — writing, editing, design, publishing and marketing under one roof. A trusted US publishing company.')">
+<meta name="twitter:image" content="@yield('og_image', asset('assets/images/hero-desk.jpg'))">
+<script type="application/ld+json">{!! json_encode($organizationSchema, JSON_UNESCAPED_SLASHES) !!}</script>
+@stack('structured-data')
 <link rel="icon" href="{{ asset('assets/favicon-32.png') }}" type="image/png" sizes="32x32">
 <link rel="icon" href="{{ asset('assets/favicon-16.png') }}" type="image/png" sizes="16x16">
 <link rel="apple-touch-icon" href="{{ asset('assets/apple-touch-icon.png') }}">

@@ -2,6 +2,21 @@
 
 @section('title', $service['nav_title'].' Services — Infinite Books Publishing')
 @section('description', $service['meta_description'])
+@section('og_image', $service['image_url'] ?? asset('assets/images/hero-desk.jpg'))
+
+@push('structured-data')
+@php
+  $serviceSchema = [
+    '@context' => 'https://schema.org',
+    '@type' => 'Service',
+    'name' => $service['nav_title'],
+    'description' => $service['meta_description'],
+    'provider' => ['@type' => 'Organization', 'name' => 'Infinite Books Publishing'],
+    'areaServed' => 'US',
+  ];
+@endphp
+<script type="application/ld+json">{!! json_encode($serviceSchema, JSON_UNESCAPED_SLASHES) !!}</script>
+@endpush
 
 @section('content')
 

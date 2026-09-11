@@ -1,7 +1,10 @@
 <?php
 
 use App\Http\Controllers\FrontendController;
+use App\Http\Controllers\SitemapController;
 use Illuminate\Support\Facades\Route;
+
+Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
 
 Route::get('/', [FrontendController::class, 'home'])->name('home');
 Route::get('/about', [FrontendController::class, 'about'])->name('about');
