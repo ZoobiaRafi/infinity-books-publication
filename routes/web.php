@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\MailController;
 use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\SitemapController;
 use Illuminate\Support\Facades\Route;
@@ -26,4 +27,17 @@ Route::get('/privacy', [FrontendController::class, 'privacy'])->name('privacy');
 
 Route::group(['prefix' => 'admin'], function () {
     Voyager::routes();
+});
+
+Route::group(['prefix' => 'admin/mail', 'middleware' => ['admin.user'], 'as' => 'admin.mail.'], function () {
+    Route::get('/', [MailController::class, 'index'])->name('index');
+    Route::get('/{account}', [MailController::class, 'inbox'])->name('inbox');
+    Route::get('/{account}/folder/{folder}', [MailController::class, 'inbox'])->name('folder');
+    Route::get('/{account}/search', [MailController::class, 'search'])->name('search');
+    Route::post('/{account}/refresh/{folder?}', [MailController::class, 'refresh'])->name('refresh');
+    Route::get('/{account}/message/{message}', [MailController::class, 'show'])->name('message.show');
+    Route::get('/{account}/message/{message}/attachment/{attachment}', [MailController::class, 'downloadAttachment'])->name('attachment.download');
+    Route::get('/{account}/compose', [MailController::class, 'compose'])->name('compose');
+    Route::get('/{account}/compose/{replyTo}', [MailController::class, 'compose'])->name('reply');
+    Route::post('/{account}/send', [MailController::class, 'send'])->name('send');
 });
