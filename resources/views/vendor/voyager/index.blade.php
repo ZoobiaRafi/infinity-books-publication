@@ -56,17 +56,16 @@
             @endif
         @endisset
 
+        <?php $google_analytics_client_id = Voyager::setting("admin.google_analytics_client_id"); ?>
+        {{-- Hidden until a Google Analytics client ID is set in Settings - the
+             "you'll need to get a client ID" placeholder isn't useful to show
+             on every visit until that's actually configured. Add the ID back
+             in Settings > google_analytics_client_id and this reappears on
+             its own, no code change needed. --}}
+        @if (isset($google_analytics_client_id) && !empty($google_analytics_client_id))
         <div class="analytics-container">
-            <?php $google_analytics_client_id = Voyager::setting("admin.google_analytics_client_id"); ?>
-            @if (isset($google_analytics_client_id) && !empty($google_analytics_client_id))
-                {{-- Google Analytics Embed --}}
-                <div id="embed-api-auth-container"></div>
-            @else
-                <p style="border-radius:4px; padding:20px; background:#fff; margin:0; color:#999; text-align:center;">
-                    {!! __('voyager::analytics.no_client_id') !!}
-                    <a href="https://console.developers.google.com" target="_blank">https://console.developers.google.com</a>
-                </p>
-            @endif
+            {{-- Google Analytics Embed --}}
+            <div id="embed-api-auth-container"></div>
 
             <div class="Dashboard Dashboard--full" id="analytics-dashboard">
                 <header class="Dashboard-header">
@@ -128,6 +127,7 @@
                 </ul>
             </div>
         </div>
+        @endif
     </div>
 @stop
 
