@@ -10,6 +10,7 @@ use App\Models\EmailFolder;
 use App\Models\EmailMessage;
 use App\Services\Mail\DynamicMailer;
 use App\Services\Mail\ImapAccountClient;
+use App\Support\HtmlSanitizer;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -176,18 +177,33 @@ class MailController extends Controller
         ]);
     }
 
-    public function compose(EmailAccount $account, ?EmailMessage $replyTo = null): View
+    public function compose(Request $request, EmailAccount $account, ?EmailMessage $replyTo = null): View
     {
         $this->authorizeAccount($account);
 
+        $initialBody = '';
+        $initialTo = '';
+        $initialCc = '';
+        $replyAll = $request->boolean('all');
+
         if ($replyTo) {
             abort_if($replyTo->email_account_id !== $account->id, 404);
+
+            $initialBody = $this->buildQuotedReplyBody($replyTo);
+
+            $recipients = $this->buildReplyRecipients($replyTo, $account, $replyAll);
+            $initialTo = implode(', ', $recipients['to']);
+            $initialCc = implode(', ', $recipients['cc']);
         }
 
         return view('admin.mail.compose', [
             'accounts' => $this->accessibleAccounts(),
             'account' => $account,
             'replyTo' => $replyTo,
+            'replyAll' => $replyAll,
+            'initialBody' => $initialBody,
+            'initialTo' => $initialTo,
+            'initialCc' => $initialCc,
         ]);
     }
 
@@ -196,12 +212,30 @@ class MailController extends Controller
         $this->authorizeAccount($account);
 
         $data = $request->validate([
-            'to' => ['required', 'email'],
+            'to' => ['required', 'string'],
+            'cc' => ['nullable', 'string'],
+            'bcc' => ['nullable', 'string'],
             'subject' => ['required', 'string', 'max:255'],
             'body' => ['required', 'string'],
             'in_reply_to' => ['nullable', 'string'],
             'attachments.*' => ['nullable', 'file', 'max:10240'],
         ]);
+
+        $toAddresses = $this->parseAddressList($data['to']);
+        $ccAddresses = $this->parseAddressList($data['cc'] ?? '');
+        $bccAddresses = $this->parseAddressList($data['bcc'] ?? '');
+
+        if (empty($toAddresses)) {
+            return back()->withInput()->withErrors(['to' => 'Enter at least one valid recipient email address.']);
+        }
+
+        if (($data['cc'] ?? '') !== '' && empty($ccAddresses)) {
+            return back()->withInput()->withErrors(['cc' => 'One or more Cc addresses look invalid.']);
+        }
+
+        if (($data['bcc'] ?? '') !== '' && empty($bccAddresses)) {
+            return back()->withInput()->withErrors(['bcc' => 'One or more Bcc addresses look invalid.']);
+        }
 
         $attachmentSpecs = collect($request->file('attachments', []))
             ->filter()
@@ -226,9 +260,11 @@ class MailController extends Controller
         Mail::mailer($mailerName)->send(new ComposedEmail(
             fromAddress: $account->email_address,
             fromName: $account->from_name,
-            toAddress: $data['to'],
+            toAddresses: $toAddresses,
             subjectLine: $data['subject'],
-            bodyHtml: nl2br(e($data['body'])),
+            bodyHtml: HtmlSanitizer::clean($data['body']),
+            ccAddresses: $ccAddresses,
+            bccAddresses: $bccAddresses,
             inReplyTo: $data['in_reply_to'] ?? null,
             attachmentSpecs: $attachmentSpecs,
         ));
@@ -243,6 +279,77 @@ class MailController extends Controller
         }
 
         return redirect()->route('admin.mail.inbox', $account)->with('success', 'Email sent.');
+    }
+
+    /**
+     * Gmail-style quote block for a reply: an empty line to type into, then
+     * "On <date>, <sender> wrote:" followed by the original message
+     * indented in a blockquote. The original body is a *received* message,
+     * so it's untrusted external HTML - sanitized here before it ever
+     * touches the compose editor's DOM (the sandboxed iframe on the message
+     * view page already protects reading it, but the compose page isn't
+     * sandboxed, so this needs its own pass rather than relying on that).
+     */
+    private function buildQuotedReplyBody(EmailMessage $replyTo): string
+    {
+        $quoted = $replyTo->body_html
+            ? HtmlSanitizer::clean($replyTo->body_html)
+            : nl2br(e($replyTo->body_text ?? ''));
+
+        $who = $replyTo->from_name ? "{$replyTo->from_name} <{$replyTo->from_email}>" : $replyTo->from_email;
+        $when = $replyTo->date?->format('D, M j, Y \a\t g:i A') ?? '';
+
+        return '<p><br></p><p>On '.e($when).', '.e($who).' wrote:</p>'
+            .'<blockquote style="margin:0 0 0 .8ex; border-left:1px solid #ccc; padding-left:1ex;">'.$quoted.'</blockquote>';
+    }
+
+    /**
+     * Reply defaults the "To" field to just the original sender. Reply All
+     * additionally Cc's everyone else who was on the original message (its
+     * "To" and "Cc" recipients combined), minus this account's own address
+     * so it doesn't end up replying to itself, and de-duplicated.
+     *
+     * @return array{to: array<int, string>, cc: array<int, string>}
+     */
+    private function buildReplyRecipients(EmailMessage $replyTo, EmailAccount $account, bool $replyAll): array
+    {
+        $to = array_filter([$replyTo->from_email]);
+
+        if (! $replyAll) {
+            return ['to' => $to, 'cc' => []];
+        }
+
+        $self = strtolower($account->email_address);
+
+        $others = collect($replyTo->to ?? [])
+            ->merge($replyTo->cc ?? [])
+            ->pluck('email')
+            ->filter()
+            ->reject(fn ($email) => strtolower($email) === $self || in_array(strtolower($email), array_map('strtolower', $to), true))
+            ->unique(fn ($email) => strtolower($email))
+            ->values()
+            ->all();
+
+        return ['to' => $to, 'cc' => $others];
+    }
+
+    /**
+     * Splits a comma/semicolon-separated recipient field (as typed by a
+     * person, e.g. "a@x.com, b@y.com") into a list of validated addresses,
+     * silently dropping anything that isn't a well-formed email rather than
+     * failing the whole send over one typo'd entry.
+     *
+     * @return array<int, string>
+     */
+    private function parseAddressList(string $value): array
+    {
+        return collect(preg_split('/[,;]+/', $value))
+            ->map(fn ($email) => trim($email))
+            ->filter()
+            ->filter(fn ($email) => filter_var($email, FILTER_VALIDATE_EMAIL) !== false)
+            ->unique(fn ($email) => strtolower($email))
+            ->values()
+            ->all();
     }
 
     private function accessibleAccounts()

@@ -4,7 +4,7 @@
 
 @section('page_header')
     <div class="container-fluid">
-        <h1 class="page-title"><i class="voyager-paper-plane"></i> {{ $replyTo ? 'Reply' : 'Compose' }}</h1>
+        <h1 class="page-title"><i class="voyager-paper-plane"></i> {{ $replyTo ? ($replyAll ? 'Reply All' : 'Reply') : 'Compose' }}</h1>
     </div>
 @stop
 
@@ -39,8 +39,23 @@
 
                         <div class="form-group">
                             <label>{{ __('To') }}</label>
-                            <input type="email" name="to" class="form-control" required
-                                   value="{{ old('to', $replyTo?->from_email) }}">
+                            <input type="email" name="to" class="form-control" multiple required
+                                   placeholder="name@example.com, another@example.com"
+                                   value="{{ old('to', $initialTo) }}">
+                        </div>
+
+                        <div class="form-group">
+                            <label>{{ __('Cc') }}</label>
+                            <input type="email" name="cc" class="form-control" multiple
+                                   placeholder="name@example.com, another@example.com"
+                                   value="{{ old('cc', $initialCc) }}">
+                        </div>
+
+                        <div class="form-group">
+                            <label>{{ __('Bcc') }}</label>
+                            <input type="email" name="bcc" class="form-control" multiple
+                                   placeholder="name@example.com, another@example.com"
+                                   value="{{ old('bcc') }}">
                         </div>
 
                         <div class="form-group">
@@ -51,7 +66,7 @@
 
                         <div class="form-group">
                             <label>{{ __('Message') }}</label>
-                            <textarea name="body" class="form-control" rows="12" required>{{ old('body', $replyTo ? "\n\n---- Original message ----\n".($replyTo->body_text ?: strip_tags((string) $replyTo->body_html)) : '') }}</textarea>
+                            <textarea name="body" id="mail-compose-body" class="form-control" rows="12" required>{{ old('body', $initialBody) }}</textarea>
                         </div>
 
                         <div class="form-group">
@@ -74,4 +89,49 @@
             </div>
         </div>
     </div>
+@stop
+
+@section('css')
+    <style>
+        /* Blend TinyMCE's own chrome with the rest of the mail app instead of
+           its default square-cornered look. */
+        .tox-tinymce {
+            border-radius: 8px !important;
+            border-color: var(--mail-border, #e7eaf0) !important;
+        }
+        .tox .tox-toolbar__primary {
+            background: var(--mail-bg, #f7f9fc) !important;
+        }
+    </style>
+@stop
+
+@section('javascript')
+    <script>
+        function initMailComposeEditor() {
+            tinymce.remove('#mail-compose-body');
+
+            tinymce.init(window.voyagerTinyMCE.getConfig({
+                selector: '#mail-compose-body',
+                menubar: false,
+                min_height: 320,
+                plugins: 'link lists',
+                // Close approximation of Gmail's compose toolbar: format/size,
+                // bold/italic/underline/strike, text/highlight color, alignment,
+                // lists, indent, blockquote, link, clear formatting.
+                toolbar: 'styleselect | bold italic underline strikethrough | forecolor backcolor | alignleft aligncenter alignright | bullist numlist outdent indent | blockquote | link unlink | removeformat',
+                branding: false,
+            }));
+        }
+
+        $(document).ready(initMailComposeEditor);
+
+        // Browsers restoring this page from back/forward cache (bfcache) skip
+        // re-running scripts, which otherwise leaves a dead, non-editable
+        // TinyMCE instance behind - reinitialize whenever that happens.
+        window.addEventListener('pageshow', function (event) {
+            if (event.persisted) {
+                initMailComposeEditor();
+            }
+        });
+    </script>
 @stop

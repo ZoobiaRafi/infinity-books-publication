@@ -8,6 +8,9 @@
         <a href="{{ route('admin.mail.reply', ['account' => $account, 'replyTo' => $message]) }}" class="btn btn-primary btn-add-new">
             <i class="voyager-paper-plane"></i> <span>{{ __('Reply') }}</span>
         </a>
+        <a href="{{ route('admin.mail.reply', ['account' => $account, 'replyTo' => $message, 'all' => 1]) }}" class="btn btn-default btn-add-new">
+            <i class="voyager-paper-plane"></i> <span>{{ __('Reply All') }}</span>
+        </a>
     </div>
 @stop
 

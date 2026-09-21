@@ -16,14 +16,19 @@ class ComposedEmail extends Mailable
     use Queueable, SerializesModels;
 
     /**
+     * @param  array<int, string>  $toAddresses
+     * @param  array<int, string>  $ccAddresses
+     * @param  array<int, string>  $bccAddresses
      * @param  array<int, array{path: string, name: string, mime: ?string}>  $attachmentSpecs
      */
     public function __construct(
         public string $fromAddress,
         public ?string $fromName,
-        public string $toAddress,
+        public array $toAddresses,
         public string $subjectLine,
         public string $bodyHtml,
+        public array $ccAddresses = [],
+        public array $bccAddresses = [],
         public ?string $inReplyTo = null,
         public array $attachmentSpecs = [],
     ) {}
@@ -32,7 +37,9 @@ class ComposedEmail extends Mailable
     {
         return new Envelope(
             from: new Address($this->fromAddress, $this->fromName ?: $this->fromAddress),
-            to: [$this->toAddress],
+            to: $this->toAddresses,
+            cc: $this->ccAddresses,
+            bcc: $this->bccAddresses,
             subject: $this->subjectLine,
         );
     }
