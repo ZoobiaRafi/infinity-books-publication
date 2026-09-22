@@ -37,9 +37,9 @@
     </nav>
 
     <div class="header-actions">
-      <a class="phone-link" href="tel:9802234655">
+      <a class="phone-link" href="tel:3072228407">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.804 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384"></path></svg>
-        +1 (980) 223-4655
+        +1 (307) 222-8407
       </a>
       <a class="btn btn-primary btn-sm header-cta" href="{{ route('contact.index') }}">Free Consultation</a>
       <button class="menu-toggle" id="menu-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-nav">

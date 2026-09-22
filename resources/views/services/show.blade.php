@@ -29,7 +29,7 @@
       <p>{{ $service['lede'] }}</p>
       <div class="page-hero-actions">
         <a href="{{ route('contact.index') }}" class="btn btn-primary">Get a Free Consultation</a>
-        <a href="tel:9802234655" class="btn btn-outline">Call Now</a>
+        <a href="tel:3072228407" class="btn btn-outline">Call Now</a>
       </div>
     </div>
   </section>

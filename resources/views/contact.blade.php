@@ -24,11 +24,11 @@
         <p style="color:var(--fg-muted);margin:1.1rem 0 0;">Whether you have a finished manuscript or just an idea, tell us where things stand — we'll recommend the right service or package and outline next steps.</p>
 
         <div class="contact-info-list">
-          <a class="contact-method" href="tel:9802234655">
+          <a class="contact-method" href="tel:3072228407">
             <span class="feature-icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.804 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384"></path></svg>
             </span>
-            <span><strong>Give us a ring</strong><span>+1 (980) 223-4655</span></span>
+            <span><strong>Give us a ring</strong><span>+1 (307) 222-8407</span></span>
           </a>
           <a class="contact-method" href="mailto:info@infinitebookspublishing.com">
             <span class="feature-icon">

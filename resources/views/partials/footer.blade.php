@@ -32,7 +32,7 @@
   </div>
   <div class="container footer-bottom">
     <p>&copy; {{ date('Y') }} Infinite Books Publishing</p>
-    <p>+1 (980) 223-4655 &middot; info@infinitebookspublishing.com</p>
+    <p>+1 (307) 222-8407 &middot; info@infinitebookspublishing.com</p>
     <p>Address: 5830 E. 2nd St, Casper, WY 82609</p>
   </div>
 </footer>

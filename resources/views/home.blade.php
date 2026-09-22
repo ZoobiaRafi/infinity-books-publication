@@ -17,7 +17,7 @@
           <a href="{{ route('contact.index') }}" class="btn btn-primary">Start Your Story Today
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
           </a>
-          <a href="tel:9802234655" class="btn btn-outline">
+          <a href="tel:3072228407" class="btn btn-outline">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.804 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384"></path></svg>
             Call Now
           </a>
@@ -378,11 +378,11 @@
           <li>You keep 100% ownership of your book</li>
         </ul>
         <div class="contact-methods">
-          <a class="contact-method" href="tel:9802234655">
+          <a class="contact-method" href="tel:3072228407">
             <span class="feature-icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.804 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384"></path></svg>
             </span>
-            <span><strong>Give us a ring</strong><span>+1 (980) 223-4655</span></span>
+            <span><strong>Give us a ring</strong><span>+1 (307) 222-8407</span></span>
           </a>
           <a class="contact-method" href="mailto:info@infinitebookspublishing.com">
             <span class="feature-icon">
