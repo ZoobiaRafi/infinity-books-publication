@@ -11,6 +11,25 @@
 
     .mail-app { color: var(--mail-ink); }
 
+    /* Chrome/Edge auto-dark-mode-styles native <button>/<input>/<select>
+       elements unless a page opts out - without this, buttons throughout
+       the mail app show a stray darker box behind their own label text
+       (their own background painted correctly, but the browser's own
+       dark "control" surface layered underneath just the text). Applies
+       to every button/input in the mail app, not just the ones that have
+       already hit this. */
+    .mail-app button,
+    .mail-app input,
+    .mail-app select,
+    .mail-app textarea {
+        color-scheme: light;
+    }
+
+    .mail-app button {
+        -webkit-appearance: none;
+        appearance: none;
+    }
+
     /* ---------- Dashboard widget ---------- */
     .mail-overview-grid {
         display: grid;

@@ -140,6 +140,24 @@
             text-decoration: underline;
         }
 
+        /* Same fix as .mail-refresh-btn: without these, Chrome/Edge's
+           automatic dark-mode styling for native <button> elements draws its
+           own dark surface under the label text on top of Bootstrap's own
+           green background, showing up as a darker box hugging "Send". */
+        .mail-send-btn {
+            color-scheme: light;
+            -webkit-appearance: none;
+            appearance: none;
+            outline: none;
+            box-shadow: none;
+        }
+
+        .mail-send-btn .btn-label,
+        .mail-send-btn i {
+            background: none;
+            color: inherit;
+        }
+
         .mail-send-btn:disabled {
             opacity: .7;
             cursor: default;
