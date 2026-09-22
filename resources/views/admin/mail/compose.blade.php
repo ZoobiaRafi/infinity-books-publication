@@ -66,7 +66,12 @@
 
                         <div class="form-group">
                             <label>{{ __('Message') }}</label>
-                            <textarea name="body" id="mail-compose-body" class="form-control" rows="12" required>{{ old('body', $initialBody) }}</textarea>
+                            {{-- No `required` here: TinyMCE hides this textarea and replaces
+                                 it with its own UI, and a browser can't show the native
+                                 "please fill this out" validation bubble on a hidden field -
+                                 it just silently blocks the submit instead. Emptiness is
+                                 still enforced server-side (MailController::send()). --}}
+                            <textarea name="body" id="mail-compose-body" class="form-control" rows="12">{{ old('body', $initialBody) }}</textarea>
                         </div>
 
                         <div class="form-group">
