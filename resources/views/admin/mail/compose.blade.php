@@ -29,7 +29,7 @@
                         </div>
                     @endif
 
-                    <form method="POST" action="{{ route('admin.mail.send', $account) }}" enctype="multipart/form-data" class="mail-compose-form">
+                    <form method="POST" action="{{ route('admin.mail.send', $account) }}" enctype="multipart/form-data" class="mail-compose-form" id="mail-compose-form">
                         @csrf
 
                         <div class="form-group">
@@ -37,25 +37,34 @@
                             <input type="text" class="form-control" value="{{ $account->from_name ? $account->from_name.' <'.$account->email_address.'>' : $account->email_address }}" disabled>
                         </div>
 
-                        <div class="form-group">
-                            <label>{{ __('To') }}</label>
-                            <input type="email" name="to" class="form-control" multiple required
-                                   placeholder="name@example.com, another@example.com"
-                                   value="{{ old('to', $initialTo) }}">
-                        </div>
+                        @php
+                            $ccValue = old('cc', $initialCc);
+                            $bccValue = old('bcc', '');
+                        @endphp
 
                         <div class="form-group">
+                            <label>{{ __('To') }}</label>
+                            <div class="mail-to-row">
+                                <input type="email" name="to" class="form-control" multiple required
+                                       placeholder="name@example.com, another@example.com"
+                                       value="{{ old('to', $initialTo) }}">
+                                <a href="#" id="mail-cc-toggle" class="mail-cc-bcc-toggle" style="{{ $ccValue !== '' ? 'display:none;' : '' }}">{{ __('Cc') }}</a>
+                                <a href="#" id="mail-bcc-toggle" class="mail-cc-bcc-toggle" style="{{ $bccValue !== '' ? 'display:none;' : '' }}">{{ __('Bcc') }}</a>
+                            </div>
+                        </div>
+
+                        <div class="form-group" id="mail-cc-group" style="{{ $ccValue === '' ? 'display:none;' : '' }}">
                             <label>{{ __('Cc') }}</label>
                             <input type="email" name="cc" class="form-control" multiple
                                    placeholder="name@example.com, another@example.com"
-                                   value="{{ old('cc', $initialCc) }}">
+                                   value="{{ $ccValue }}">
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group" id="mail-bcc-group" style="{{ $bccValue === '' ? 'display:none;' : '' }}">
                             <label>{{ __('Bcc') }}</label>
                             <input type="email" name="bcc" class="form-control" multiple
                                    placeholder="name@example.com, another@example.com"
-                                   value="{{ old('bcc') }}">
+                                   value="{{ $bccValue }}">
                         </div>
 
                         <div class="form-group">
@@ -87,7 +96,7 @@
                         @endif
 
                         <button type="submit" class="btn btn-success mail-send-btn">
-                            <i class="voyager-check"></i> {{ __('Send') }}
+                            <i class="voyager-check"></i> <span class="btn-label">{{ __('Send') }}</span>
                         </button>
                     </form>
                 </div>
@@ -106,6 +115,34 @@
         }
         .tox .tox-toolbar__primary {
             background: var(--mail-bg, #f7f9fc) !important;
+        }
+
+        .mail-to-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .mail-to-row input {
+            flex: 1;
+        }
+
+        .mail-cc-bcc-toggle {
+            flex-shrink: 0;
+            font-size: 13px;
+            color: var(--mail-muted, #8a94a6);
+            text-decoration: none;
+        }
+
+        .mail-cc-bcc-toggle:hover,
+        .mail-cc-bcc-toggle:focus {
+            color: var(--mail-primary, #22A7F0);
+            text-decoration: underline;
+        }
+
+        .mail-send-btn:disabled {
+            opacity: .7;
+            cursor: default;
         }
     </style>
 @stop
@@ -136,6 +173,42 @@
         window.addEventListener('pageshow', function (event) {
             if (event.persisted) {
                 initMailComposeEditor();
+            }
+        });
+
+        // Gmail-style Cc/Bcc: hidden behind a small toggle link next to To,
+        // until clicked (or already pre-filled, e.g. from Reply All).
+        function showMailField(groupId, toggleId) {
+            document.getElementById(groupId).style.display = 'block';
+            document.getElementById(toggleId).style.display = 'none';
+            document.querySelector('#' + groupId + ' input').focus();
+        }
+
+        document.getElementById('mail-cc-toggle').addEventListener('click', function (event) {
+            event.preventDefault();
+            showMailField('mail-cc-group', 'mail-cc-toggle');
+        });
+
+        document.getElementById('mail-bcc-toggle').addEventListener('click', function (event) {
+            event.preventDefault();
+            showMailField('mail-bcc-group', 'mail-bcc-toggle');
+        });
+
+        // Disable Send and show a "Sending..." state the moment the form is
+        // submitted, so a slow SMTP connection can't be mistaken for the
+        // button doing nothing - it re-enables itself on bfcache restore
+        // (e.g. the user hits back after a validation error) via pageshow.
+        document.getElementById('mail-compose-form').addEventListener('submit', function () {
+            var btn = document.querySelector('.mail-send-btn');
+            btn.disabled = true;
+            btn.querySelector('.btn-label').innerText = '{{ __('Sending...') }}';
+        });
+
+        window.addEventListener('pageshow', function (event) {
+            if (event.persisted) {
+                var btn = document.querySelector('.mail-send-btn');
+                btn.disabled = false;
+                btn.querySelector('.btn-label').innerText = '{{ __('Send') }}';
             }
         });
     </script>
