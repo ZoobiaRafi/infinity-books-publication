@@ -87,6 +87,11 @@ class EmailAccount extends Model
         return $this->hasMany(EmailMessage::class);
     }
 
+    public function drafts(): HasMany
+    {
+        return $this->hasMany(EmailDraft::class)->orderByDesc('updated_at');
+    }
+
     public function unreadCount(): int
     {
         return $this->messages()->where('is_read', false)->count();

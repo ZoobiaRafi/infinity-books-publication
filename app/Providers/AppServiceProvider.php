@@ -50,6 +50,11 @@ class AppServiceProvider extends ServiceProvider
                     ->join('email_messages', 'email_messages.email_folder_id', '=', 'email_folders.id')
                     ->where('email_folders.email_account_id', $account->id)
                     ->where('email_folders.role', 'inbox')
+                    // Raw query builder, not Eloquent - EmailMessage's
+                    // SoftDeletes scope doesn't apply here automatically,
+                    // so messages removed from the admin panel need to be
+                    // excluded explicitly or they'd still count on this widget.
+                    ->whereNull('email_messages.deleted_at')
                     ->selectRaw('count(*) as total, sum(is_read = 0) as unread, sum(is_read = 1) as opened')
                     ->first();
 

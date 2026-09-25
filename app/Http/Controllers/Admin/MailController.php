@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Mail\ComposedEmail;
 use App\Models\EmailAccount;
 use App\Models\EmailAttachment;
+use App\Models\EmailDraft;
 use App\Models\EmailFolder;
 use App\Models\EmailMessage;
 use App\Services\Mail\DynamicMailer;
@@ -29,6 +30,8 @@ use Illuminate\View\View;
  */
 class MailController extends Controller
 {
+    public const PER_PAGE_OPTIONS = [10, 25, 50, 100];
+
     public function index(): View|RedirectResponse
     {
         $accounts = $this->accessibleAccounts();
@@ -51,7 +54,7 @@ class MailController extends Controller
 
         $messages = $folder->messages()
             ->orderByDesc('date')
-            ->paginate(25)
+            ->paginate($this->perPage($request))
             ->withQueryString();
 
         return view('admin.mail.inbox', [
@@ -59,7 +62,61 @@ class MailController extends Controller
             'account' => $account,
             'folder' => $folder,
             'messages' => $messages,
+            'perPage' => $this->perPage($request),
         ]);
+    }
+
+    /**
+     * Bulk-acts on messages selected on the current page. "delete" only
+     * ever touches this admin panel's local cache (a soft delete) - it
+     * never talks to the real mailbox, and ImapAccountClient::upsertMessage()
+     * is taught to leave soft-deleted rows alone so a later sync can't
+     * silently bring them back. "mark_read" does the opposite: it's a
+     * genuine two-way sync, same as opening a single message, so it also
+     * flips \Seen on the real IMAP server for each message.
+     */
+    public function bulkAction(Request $request, EmailAccount $account): RedirectResponse
+    {
+        $this->authorizeAccount($account);
+
+        $data = $request->validate([
+            'bulk_action' => ['required', 'in:mark_read,delete'],
+            'message_ids' => ['required', 'array', 'min:1'],
+            'message_ids.*' => ['integer'],
+        ]);
+
+        $messages = EmailMessage::where('email_account_id', $account->id)
+            ->whereIn('id', $data['message_ids'])
+            ->get();
+
+        if ($messages->isEmpty()) {
+            return redirect()->back()->with('error', 'No messages were selected.');
+        }
+
+        if ($data['bulk_action'] === 'delete') {
+            EmailMessage::whereIn('id', $messages->pluck('id'))->delete();
+
+            return redirect()->back()->with('success', $messages->count().' message(s) removed from the admin panel (still on the mail server).');
+        }
+
+        $client = null;
+
+        foreach ($messages as $message) {
+            if ($message->is_read) {
+                continue;
+            }
+
+            try {
+                $client ??= (new ImapAccountClient($account))->connect();
+                $client->markRead($message);
+            } catch (\Throwable $e) {
+                $message->update(['is_read' => true]);
+            }
+        }
+
+        $client?->disconnect();
+
+        return redirect()->back()->with('success', $messages->count().' message(s) marked as read.');
     }
 
     public function refresh(EmailAccount $account, ?EmailFolder $folder = null): RedirectResponse
@@ -119,7 +176,7 @@ class MailController extends Controller
                 $query->whereRaw('1 = 0');
             })
             ->orderByDesc('date')
-            ->paginate(25)
+            ->paginate($this->perPage($request))
             ->withQueryString();
 
         return view('admin.mail.search', [
@@ -127,6 +184,7 @@ class MailController extends Controller
             'account' => $account,
             'term' => $term,
             'messages' => $messages,
+            'perPage' => $this->perPage($request),
         ]);
     }
 
@@ -184,12 +242,15 @@ class MailController extends Controller
         $initialBody = '';
         $initialTo = '';
         $initialCc = '';
+        $initialBcc = '';
+        $initialSubject = '';
         $replyAll = $request->boolean('all');
 
         if ($replyTo) {
             abort_if($replyTo->email_account_id !== $account->id, 404);
 
             $initialBody = $this->buildQuotedReplyBody($replyTo);
+            $initialSubject = 'Re: '.preg_replace('/^Re:\s*/i', '', (string) $replyTo->subject);
 
             $recipients = $this->buildReplyRecipients($replyTo, $account, $replyAll);
             $initialTo = implode(', ', $recipients['to']);
@@ -201,10 +262,104 @@ class MailController extends Controller
             'account' => $account,
             'replyTo' => $replyTo,
             'replyAll' => $replyAll,
+            'draft' => null,
             'initialBody' => $initialBody,
             'initialTo' => $initialTo,
             'initialCc' => $initialCc,
+            'initialBcc' => $initialBcc,
+            'initialSubject' => $initialSubject,
         ]);
+    }
+
+    public function editDraft(EmailAccount $account, EmailDraft $draft): View
+    {
+        $this->authorizeAccount($account);
+        abort_if($draft->email_account_id !== $account->id, 404);
+
+        return view('admin.mail.compose', [
+            'accounts' => $this->accessibleAccounts(),
+            'account' => $account,
+            'replyTo' => $draft->replyTo,
+            'replyAll' => $draft->reply_all,
+            'draft' => $draft,
+            'initialBody' => $draft->body_html ?? '',
+            'initialTo' => $draft->to_addresses ?? '',
+            'initialCc' => $draft->cc_addresses ?? '',
+            'initialBcc' => $draft->bcc_addresses ?? '',
+            'initialSubject' => $draft->subject ?? '',
+        ]);
+    }
+
+    public function drafts(EmailAccount $account): View
+    {
+        $this->authorizeAccount($account);
+
+        return view('admin.mail.drafts', [
+            'accounts' => $this->accessibleAccounts(),
+            'account' => $account,
+            'drafts' => $account->drafts()->paginate(25),
+        ]);
+    }
+
+    /**
+     * Creates a new draft, or updates the one already being edited (when
+     * the form carries a draft_id) so repeated saves overwrite in place
+     * instead of piling up duplicates. Local only, same as everything else
+     * in EmailDraft - a draft never touches the real mailbox until it's
+     * actually sent.
+     */
+    public function saveDraft(Request $request, EmailAccount $account): RedirectResponse
+    {
+        $this->authorizeAccount($account);
+
+        $data = $request->validate([
+            'draft_id' => ['nullable', 'integer'],
+            'to' => ['nullable', 'string'],
+            'cc' => ['nullable', 'string'],
+            'bcc' => ['nullable', 'string'],
+            'subject' => ['nullable', 'string', 'max:255'],
+            'body' => ['nullable', 'string'],
+            'reply_to_id' => ['nullable', 'integer'],
+            'reply_all' => ['nullable', 'boolean'],
+        ]);
+
+        $draft = ! empty($data['draft_id'])
+            ? EmailDraft::where('email_account_id', $account->id)->find($data['draft_id'])
+            : null;
+
+        $draft ??= new EmailDraft(['email_account_id' => $account->id]);
+
+        $draft->fill([
+            'to_addresses' => $data['to'] ?? '',
+            'cc_addresses' => $data['cc'] ?? '',
+            'bcc_addresses' => $data['bcc'] ?? '',
+            'subject' => $data['subject'] ?? '',
+            'body_html' => HtmlSanitizer::clean($data['body'] ?? ''),
+        ]);
+
+        if (! empty($data['reply_to_id'])) {
+            $replyTo = EmailMessage::where('email_account_id', $account->id)->find($data['reply_to_id']);
+
+            if ($replyTo) {
+                $draft->in_reply_to_message_id = $replyTo->id;
+                $draft->reply_all = $request->boolean('reply_all');
+            }
+        }
+
+        $draft->save();
+
+        return redirect()->route('admin.mail.draft.edit', ['account' => $account, 'draft' => $draft])
+            ->with('success', 'Draft saved.');
+    }
+
+    public function deleteDraft(EmailAccount $account, EmailDraft $draft): RedirectResponse
+    {
+        $this->authorizeAccount($account);
+        abort_if($draft->email_account_id !== $account->id, 404);
+
+        $draft->delete();
+
+        return redirect()->route('admin.mail.drafts', $account)->with('success', 'Draft discarded.');
     }
 
     public function send(Request $request, EmailAccount $account): RedirectResponse
@@ -218,6 +373,7 @@ class MailController extends Controller
             'subject' => ['required', 'string', 'max:255'],
             'body' => ['required', 'string'],
             'in_reply_to' => ['nullable', 'string'],
+            'draft_id' => ['nullable', 'integer'],
             'attachments.*' => ['nullable', 'file', 'max:10240'],
         ]);
 
@@ -276,6 +432,10 @@ class MailController extends Controller
                 // The send already succeeded; losing the Sent-folder copy isn't
                 // worth failing the request over.
             }
+        }
+
+        if (! empty($data['draft_id'])) {
+            EmailDraft::where('email_account_id', $account->id)->where('id', $data['draft_id'])->delete();
         }
 
         return redirect()->route('admin.mail.inbox', $account)->with('success', 'Email sent.');
@@ -350,6 +510,13 @@ class MailController extends Controller
             ->unique(fn ($email) => strtolower($email))
             ->values()
             ->all();
+    }
+
+    private function perPage(Request $request): int
+    {
+        $requested = (int) $request->query('per_page', 25);
+
+        return in_array($requested, self::PER_PAGE_OPTIONS, true) ? $requested : 25;
     }
 
     private function accessibleAccounts()

@@ -119,8 +119,23 @@ class ImapAccountClient
         return $count;
     }
 
-    private function upsertMessage(EmailFolder $folder, RemoteMessage $message): EmailMessage
+    private function upsertMessage(EmailFolder $folder, RemoteMessage $message): ?EmailMessage
     {
+        // A message soft-deleted from the admin panel (see MailController::
+        // bulkAction()) must stay gone even though it's still sitting on the
+        // real mailbox - without this check, updateOrCreate() below would
+        // silently insert a second row for the same (folder, uid) pair,
+        // since its own lookup query can't see soft-deleted rows, tripping
+        // the unique(email_folder_id, uid) constraint.
+        $existing = EmailMessage::withTrashed()
+            ->where('email_folder_id', $folder->id)
+            ->where('uid', $message->getUid())
+            ->first();
+
+        if ($existing?->trashed()) {
+            return null;
+        }
+
         $from = $message->getFrom()->first();
         $flags = $message->getFlags();
 

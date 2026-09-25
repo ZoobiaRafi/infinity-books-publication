@@ -257,30 +257,50 @@
     }
 
     /* ---------- Message list ---------- */
+    /* A row is a wrapper <div> (holding the select checkbox) around an
+       inner <a class="mail-message-link"> that carries the actual click-to-
+       open behavior - the checkbox needs to be a sibling of that link, not
+       a descendant, or clicking it would also navigate to the message. */
     .mail-message-row {
         display: flex;
         align-items: center;
         gap: 12px;
         padding: 13px 16px;
-        text-decoration: none;
-        color: inherit;
         border-bottom: 1px solid var(--mail-border);
         transition: background .12s ease;
     }
 
     .mail-message-row:last-child { border-bottom: none; }
 
-    .mail-message-row:hover, .mail-message-row:focus {
+    .mail-message-row:hover, .mail-message-row:focus-within {
         background: var(--mail-bg);
-        color: inherit;
-        text-decoration: none;
     }
 
     .mail-message-row.unread {
         background: rgba(34, 167, 240, 0.04);
     }
 
-    .mail-message-row.unread::before {
+    .mail-row-checkbox {
+        flex-shrink: 0;
+        margin: 0;
+    }
+
+    .mail-message-link {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex: 1;
+        min-width: 0;
+        text-decoration: none;
+        color: inherit;
+    }
+
+    .mail-message-link:hover, .mail-message-link:focus {
+        color: inherit;
+        text-decoration: none;
+    }
+
+    .mail-message-row.unread .mail-message-link::before {
         content: "";
         width: 8px;
         height: 8px;
@@ -289,7 +309,7 @@
         flex-shrink: 0;
     }
 
-    .mail-message-row:not(.unread)::before {
+    .mail-message-row:not(.unread) .mail-message-link::before {
         content: "";
         width: 8px;
         flex-shrink: 0;
@@ -345,6 +365,78 @@
         padding: 2px 8px;
         font-size: 11px;
         color: var(--mail-muted);
+    }
+
+    /* ---------- Bulk select toolbar + pagination controls ---------- */
+    .mail-list-toolbar {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 10px 16px;
+        border-bottom: 1px solid var(--mail-border);
+        background: #fbfcfe;
+    }
+
+    .mail-list-toolbar input[type="checkbox"] {
+        margin: 0;
+    }
+
+    .mail-bulk-count {
+        font-size: 12px;
+        color: var(--mail-muted);
+        margin-left: auto;
+    }
+
+    .mail-bulk-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        color-scheme: light;
+        -webkit-appearance: none;
+        appearance: none;
+        border: 1px solid var(--mail-border);
+        background: #fff;
+        border-radius: 6px;
+        padding: 5px 12px;
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--mail-ink);
+        outline: none;
+        box-shadow: none;
+        cursor: pointer;
+    }
+
+    .mail-bulk-btn:hover:not(:disabled) {
+        border-color: var(--mail-primary);
+        color: var(--mail-primary);
+    }
+
+    .mail-bulk-btn.mail-bulk-delete:hover:not(:disabled) {
+        border-color: var(--mail-unread);
+        color: var(--mail-unread);
+    }
+
+    .mail-bulk-btn:disabled {
+        opacity: .45;
+        cursor: default;
+    }
+
+    .mail-per-page {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 12px;
+        color: var(--mail-muted);
+    }
+
+    .mail-per-page select {
+        color-scheme: light;
+        border: 1px solid var(--mail-border);
+        border-radius: 6px;
+        padding: 3px 6px;
+        font-size: 12px;
+        color: var(--mail-ink);
+        background: #fff;
     }
 
     /* ---------- Message view ---------- */

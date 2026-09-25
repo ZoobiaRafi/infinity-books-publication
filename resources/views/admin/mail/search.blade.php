@@ -20,6 +20,7 @@
             </div>
             <div class="col-md-8">
                 <div class="mail-panel">
+                    @include('admin.mail.partials.list-toolbar')
                     @if($term === '')
                         <div class="mail-empty-state">
                             <i class="voyager-search"></i>
@@ -33,18 +34,21 @@
                     @else
                         @foreach($messages as $message)
                             @php($isUnread = ! $message->is_read)
-                            <a href="{{ route('admin.mail.message.show', ['account' => $account, 'message' => $message]) }}"
-                               class="mail-message-row {{ $isUnread ? 'unread' : '' }}">
-                                <span class="mail-folder-label">{{ $message->folder->display_name }}</span>
-                                <span class="mail-message-from">{{ $message->from_name ?: $message->from_email }}</span>
-                                <span class="mail-message-body">
-                                    <span class="mail-message-subject">{{ $message->subject ?: '(no subject)' }}</span>
-                                </span>
-                                @if($message->has_attachments)
-                                    <i class="voyager-paperclip mail-attachment-icon"></i>
-                                @endif
-                                <span class="mail-message-date">{{ optional($message->date)->format('M j, g:ia') }}</span>
-                            </a>
+                            <div class="mail-message-row {{ $isUnread ? 'unread' : '' }}">
+                                <input type="checkbox" class="mail-row-checkbox" form="mail-bulk-form" name="message_ids[]" value="{{ $message->id }}">
+                                <a href="{{ route('admin.mail.message.show', ['account' => $account, 'message' => $message]) }}"
+                                   class="mail-message-link">
+                                    <span class="mail-folder-label">{{ $message->folder->display_name }}</span>
+                                    <span class="mail-message-from">{{ $message->from_name ?: $message->from_email }}</span>
+                                    <span class="mail-message-body">
+                                        <span class="mail-message-subject">{{ $message->subject ?: '(no subject)' }}</span>
+                                    </span>
+                                    @if($message->has_attachments)
+                                        <i class="voyager-paperclip mail-attachment-icon"></i>
+                                    @endif
+                                    <span class="mail-message-date">{{ optional($message->date)->format('M j, g:ia') }}</span>
+                                </a>
+                            </div>
                         @endforeach
                     @endif
                 </div>

@@ -5,6 +5,15 @@
 @section('page_header')
     <div class="container-fluid">
         <h1 class="page-title"><i class="voyager-paper-plane"></i> {{ $replyTo ? ($replyAll ? 'Reply All' : 'Reply') : 'Compose' }}</h1>
+        @if($draft)
+            <form method="POST" action="{{ route('admin.mail.draft.delete', ['account' => $account, 'draft' => $draft]) }}" class="btn-add-new" style="display: inline-block;"
+                  onsubmit="return confirm('{{ __('Discard this draft? This cannot be undone.') }}');">
+                @csrf
+                <button type="submit" class="btn btn-default">
+                    <i class="voyager-trash"></i> <span>{{ __('Discard Draft') }}</span>
+                </button>
+            </form>
+        @endif
     </div>
 @stop
 
@@ -39,7 +48,7 @@
 
                         @php
                             $ccValue = old('cc', $initialCc);
-                            $bccValue = old('bcc', '');
+                            $bccValue = old('bcc', $initialBcc);
                         @endphp
 
                         <div class="form-group">
@@ -70,7 +79,7 @@
                         <div class="form-group">
                             <label>{{ __('Subject') }}</label>
                             <input type="text" name="subject" class="form-control" required
-                                   value="{{ old('subject', $replyTo ? 'Re: '.preg_replace('/^Re:\s*/i', '', $replyTo->subject) : '') }}">
+                                   value="{{ old('subject', $initialSubject) }}">
                         </div>
 
                         <div class="form-group">
@@ -95,8 +104,22 @@
                             <input type="hidden" name="in_reply_to" value="{{ $replyTo->message_id }}">
                         @endif
 
+                        @if($replyTo)
+                            <input type="hidden" name="reply_to_id" value="{{ $replyTo->id }}">
+                            <input type="hidden" name="reply_all" value="{{ $replyAll ? 1 : 0 }}">
+                        @endif
+
+                        @if($draft)
+                            <input type="hidden" name="draft_id" value="{{ $draft->id }}">
+                        @endif
+
                         <button type="submit" class="btn btn-success mail-send-btn">
                             <i class="voyager-check"></i> <span class="btn-label">{{ __('Send') }}</span>
+                        </button>
+
+                        <button type="submit" class="btn btn-default mail-draft-btn" id="mail-draft-btn"
+                                formaction="{{ route('admin.mail.draft.save', $account) }}" formnovalidate>
+                            <i class="voyager-file-text"></i> <span class="btn-label">{{ __('Save as Draft') }}</span>
                         </button>
                     </form>
                 </div>
@@ -158,7 +181,23 @@
             color: inherit;
         }
 
-        .mail-send-btn:disabled {
+        .mail-draft-btn {
+            color-scheme: light;
+            -webkit-appearance: none;
+            appearance: none;
+            outline: none;
+            box-shadow: none;
+            margin-left: 8px;
+        }
+
+        .mail-draft-btn .btn-label,
+        .mail-draft-btn i {
+            background: none;
+            color: inherit;
+        }
+
+        .mail-send-btn:disabled,
+        .mail-draft-btn:disabled {
             opacity: .7;
             cursor: default;
         }
@@ -212,21 +251,27 @@
             showMailField('mail-bcc-group', 'mail-bcc-toggle');
         });
 
-        // Disable Send and show a "Sending..." state the moment the form is
-        // submitted, so a slow SMTP connection can't be mistaken for the
-        // button doing nothing - it re-enables itself on bfcache restore
-        // (e.g. the user hits back after a validation error) via pageshow.
-        document.getElementById('mail-compose-form').addEventListener('submit', function () {
-            var btn = document.querySelector('.mail-send-btn');
+        // Disable whichever button was actually clicked (Send vs Save as
+        // Draft share one form, distinguished via formaction) and show its
+        // own "-ing..." state, so a slow SMTP connection / DB write can't be
+        // mistaken for the button doing nothing. event.submitter is the
+        // specific <button> that triggered this submit.
+        document.getElementById('mail-compose-form').addEventListener('submit', function (event) {
+            var btn = event.submitter || document.querySelector('.mail-send-btn');
+            var isDraft = btn.id === 'mail-draft-btn';
             btn.disabled = true;
-            btn.querySelector('.btn-label').innerText = '{{ __('Sending...') }}';
+            btn.querySelector('.btn-label').innerText = isDraft ? '{{ __('Saving...') }}' : '{{ __('Sending...') }}';
         });
 
         window.addEventListener('pageshow', function (event) {
             if (event.persisted) {
-                var btn = document.querySelector('.mail-send-btn');
-                btn.disabled = false;
-                btn.querySelector('.btn-label').innerText = '{{ __('Send') }}';
+                var sendBtn = document.querySelector('.mail-send-btn');
+                sendBtn.disabled = false;
+                sendBtn.querySelector('.btn-label').innerText = '{{ __('Send') }}';
+
+                var draftBtn = document.getElementById('mail-draft-btn');
+                draftBtn.disabled = false;
+                draftBtn.querySelector('.btn-label').innerText = '{{ __('Save as Draft') }}';
             }
         });
     </script>
